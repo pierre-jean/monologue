@@ -2,6 +2,8 @@ package fr.baraud.codurance.monologue.ui;
 
 import fr.baraud.codurance.monologue.timelines.Timeline;
 
+import java.util.Date;
+
 /**
  * An interface to read input from users and send output to them.
  */
@@ -26,16 +28,18 @@ public interface UserInterface {
 
     /**
      * Send and display the timeline of an user
-     * @param timeline
+     * @param timeline to display
+     * @param currentTime the current time, used to print the delay since the post was created
      */
-    void writeTimeline(Timeline timeline);
+    void writeTimeline(Timeline timeline, Date currentTime);
 
     /**
      * Send and display the wall of an user,
      * aggregation of multiple users' timelines
      * @param wall
+     * @param currentTime the current time, used to print the delay since the post was created
      */
-    void writeWall(Timeline wall);
+    void writeWall(Timeline wall, Date currentTime);
 
     /**
      * Close the user interface

@@ -42,10 +42,10 @@ public class Monologue {
                     socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
                     break;
                 case SHOW_TIMELINE:
-                    userInterface.writeTimeline(socialStack.getTimeline(instruction.getUser()));
+                    userInterface.writeTimeline(socialStack.getTimeline(instruction.getUser()), new Date());
                     break;
                 case SHOW_WALL:
-                    userInterface.writeWall(socialStack.getWall(instruction.getUser()));
+                    userInterface.writeWall(socialStack.getWall(instruction.getUser()), new Date());
                     break;
                 case FOLLOW:
                     socialStack = socialStack.follow(instruction.getUser(), instruction.getContent());

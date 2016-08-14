@@ -63,6 +63,12 @@ public class ConsoleInterface implements UserInterface{
     private final String INSTRUCTION_KEY_EXIT= "quit";
 
     /**
+     * Pattern to show before an command invite
+     * in order to show the user he can input a command
+     */
+    private final String INSTRUCTION_INVITE= "> ";
+
+    /**
      * A scanner to read from the user input, typically the standard input
      */
     private final Scanner userInputScanner;
@@ -92,6 +98,12 @@ public class ConsoleInterface implements UserInterface{
     public Instruction getNextInstruction() {
         Instruction userInstruction;
         do {
+            try {
+                userDisplayStream.write(INSTRUCTION_INVITE.getBytes());
+                userDisplayStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             userInstruction = parseInstruction(userInputScanner.nextLine());
         } while (userInstruction == null);
         return userInstruction;
@@ -111,19 +123,54 @@ public class ConsoleInterface implements UserInterface{
         }
     }
 
-    public void writeTimeline(Timeline timeline) {
+    public void writeTimeline(Timeline timeline, Date currentTime) {
         if (timeline != null){
-            writeInformation(timeline.getMessage());
-            writeTimeline(timeline.getNext());
+            writeInformation(timeline.getMessage()+ " ("+printDelay(timeline.getMessageTimestamp(), currentTime)+")");
+            writeTimeline(timeline.getNext(), currentTime);
         }
     }
 
-    public void writeWall(Timeline wall) {
+    public void writeWall(Timeline wall, Date currentTime) {
         if (wall != null){
-            writeInformation(wall.getUser()+" - "+wall.getMessage());
-            writeWall(wall.getNext());
+            writeInformation(wall.getUser()+" - "+wall.getMessage()+ " ("+printDelay(wall.getMessageTimestamp(), currentTime)+")");
+            writeWall(wall.getNext(), currentTime);
         }
 
+    }
+
+    protected String printInUnit(long delay, long unit, String unitName){
+        return delay/unit > 1 ? delay/unit +" "+unitName+"s ago" : "1 "+unitName+ " ago";
+    }
+
+    protected String printDelay(Date firstDate, Date now){
+
+        final long ONE_SECOND_IN_MS = 1000l;
+        final long ONE_MIN_IN_MS = 60000l;
+        final long ONE_HOUR_IN_MS = 3600000l;
+        final long ONE_DAY_IN_MS = 86400000l;
+        final long ONE_MONTH_IN_MS = 2592000000l;
+        final long ONE_YEAR_IN_MS = 31104000000l;
+
+        if (firstDate.compareTo(now) > 0){
+            throw new IllegalArgumentException("the date parameter should be previous to the second one");
+        }
+        long delay = now.getTime() - firstDate.getTime();
+        if (delay < ONE_MIN_IN_MS){
+            return printInUnit(delay, ONE_SECOND_IN_MS, "second");
+        }
+        if (delay < ONE_HOUR_IN_MS){
+            return printInUnit(delay, ONE_MIN_IN_MS, "minute");
+        }
+        if (delay < ONE_DAY_IN_MS) {
+            return printInUnit(delay, ONE_HOUR_IN_MS, "hour");
+        }
+        if (delay < ONE_MONTH_IN_MS) {
+            return printInUnit(delay, ONE_DAY_IN_MS, "day");
+        }
+        if (delay < ONE_YEAR_IN_MS) {
+            return printInUnit(delay, ONE_MONTH_IN_MS, "month");
+        }
+        return printInUnit(delay, ONE_YEAR_IN_MS, "year");
     }
 
     /**
@@ -135,7 +182,7 @@ public class ConsoleInterface implements UserInterface{
      * @return a representation of the instruction entered, or null if
      * the pattern could not be mapped to any known Instruction
      */
-    private Instruction parseInstruction(String userEntry){
+    protected Instruction parseInstruction(String userEntry){
         if (userEntry == null || userEntry.isEmpty()){
             writeInformation(UNKNOWN_COMMAND_WARNING);
         }
