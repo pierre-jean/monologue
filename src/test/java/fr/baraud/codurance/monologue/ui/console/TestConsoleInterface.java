@@ -1,8 +1,8 @@
-package fr.baraud.codurance.monologue.console;
+package fr.baraud.codurance.monologue.ui.console;
 
-import fr.baraud.codurance.monologue.Action;
-import fr.baraud.codurance.monologue.Instruction;
-import fr.baraud.codurance.monologue.UserInterface;
+import fr.baraud.codurance.monologue.ui.Action;
+import fr.baraud.codurance.monologue.ui.Instruction;
+import fr.baraud.codurance.monologue.ui.UserInterface;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 public class TestConsoleInterface {
 
     @Test
-    public void TestPostInstruction(){
+    public void testPostInstruction(){
         String alicePost = String.format("Alice -> The sky is blue%n");
         UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(alicePost.getBytes()), new ByteArrayOutputStream());
         Instruction instruction = userInterface.getNextInstruction();
@@ -28,7 +28,7 @@ public class TestConsoleInterface {
     }
 
     @Test
-    public void TestReadInstruction(){
+    public void testReadInstruction(){
         String aliceTimeline = String.format("Alice%n");
         UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceTimeline.getBytes()), new ByteArrayOutputStream());
         Instruction instruction = userInterface.getNextInstruction();
@@ -37,7 +37,7 @@ public class TestConsoleInterface {
     }
 
     @Test
-    public void TestWallInstruction(){
+    public void testWallInstruction(){
         String aliceWall = String.format("Alice wall%n");
         UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceWall.getBytes()), new ByteArrayOutputStream());
         Instruction instruction = userInterface.getNextInstruction();
@@ -46,7 +46,7 @@ public class TestConsoleInterface {
     }
 
     @Test
-    public void TestFollowInstruction(){
+    public void testFollowInstruction(){
         String aliceFollowsBob = String.format("Alice follows Bob%n");
         UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceFollowsBob.getBytes()), new ByteArrayOutputStream());
         Instruction instruction = userInterface.getNextInstruction();
@@ -56,7 +56,7 @@ public class TestConsoleInterface {
     }
 
     @Test
-    public void TestExitInstruction(){
+    public void testExitInstruction(){
         String exit = String.format("quit%n");
         UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(exit.getBytes()), new ByteArrayOutputStream());
         Instruction instruction = userInterface.getNextInstruction();
@@ -64,7 +64,7 @@ public class TestConsoleInterface {
     }
 
     @Test
-    public void TestUnknownEscapeInstruction(){
+    public void testUnknownEscapeInstruction(){
         String wrongInstruction1 = String.format("%n");
         String wrongInstruction2 = String.format("wall Alice%n");
         String aliceRead = String.format("Alice%n");
@@ -77,7 +77,7 @@ public class TestConsoleInterface {
     }
 
     @Test
-    public void TestCloseUserInterface(){
+    public void testCloseUserInterface(){
         OutputStream out = new ByteArrayOutputStream();
         UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream("".getBytes()), out);
         userInterface.close();

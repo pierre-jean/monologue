@@ -1,8 +1,8 @@
-package fr.baraud.codurance.monologue;
+package fr.baraud.codurance.monologue.ui;
 
 /**
  * Action enumerates the type of action a user can do as part of an instruction
- * @see fr.baraud.codurance.monologue.Instruction
+ * @see Instruction
  */
 
 public enum Action {

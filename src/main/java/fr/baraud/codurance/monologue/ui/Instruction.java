@@ -1,4 +1,4 @@
-package fr.baraud.codurance.monologue;
+package fr.baraud.codurance.monologue.ui;
 
 /**
  * An instruction is an user action and its associated parameters
@@ -28,7 +28,7 @@ public class Instruction {
     /**
      * Returns the type of the instruction
      * @return the action of the instruction
-     * @see fr.baraud.codurance.monologue.Action
+     * @see Action
      */
     public Action getAction() {
         return action;

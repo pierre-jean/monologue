@@ -1,4 +1,6 @@
-package fr.baraud.codurance.monologue;
+package fr.baraud.codurance.monologue.ui;
+
+import fr.baraud.codurance.monologue.timelines.Timeline;
 
 /**
  * An interface to read input from users and send output to them.
@@ -11,15 +13,29 @@ public interface UserInterface {
      * Once called, the method iterate to (or wait for) the next instruction.
      *
      * @return an user Instruction
-     * @see fr.baraud.codurance.monologue.Instruction
+     * @see Instruction
      */
     Instruction getNextInstruction();
 
     /**
-     * Send and display to the user output interface
-     * @param answer the text to display to the user
+     * Send an information message to the user
+     * @param information is a text message to inform the user
      */
-    void writeAnswer(String answer);
+    void writeInformation(String information);
+
+
+    /**
+     * Send and display the timeline of an user
+     * @param timeline
+     */
+    void writeTimeline(Timeline timeline);
+
+    /**
+     * Send and display the wall of an user,
+     * aggregation of multiple users' timelines
+     * @param wall
+     */
+    void writeWall(Timeline wall);
 
     /**
      * Close the user interface

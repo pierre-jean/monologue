@@ -1,18 +1,21 @@
-package fr.baraud.codurance.monologue.console;
+package fr.baraud.codurance.monologue.ui.console;
 
-import fr.baraud.codurance.monologue.Action;
-import fr.baraud.codurance.monologue.Instruction;
-import fr.baraud.codurance.monologue.UserInterface;
+import fr.baraud.codurance.monologue.timelines.Timeline;
+import fr.baraud.codurance.monologue.ui.Action;
+import fr.baraud.codurance.monologue.ui.Instruction;
+import fr.baraud.codurance.monologue.ui.UserInterface;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
  * Console interface is an implementation of a UserInterface that provides a command line
  * interface to interact with the application Monologue
- * @see fr.baraud.codurance.monologue.UserInterface
+ * @see UserInterface
  * @see fr.baraud.codurance.monologue.Monologue
  */
 public class ConsoleInterface implements UserInterface{
@@ -96,16 +99,31 @@ public class ConsoleInterface implements UserInterface{
 
     /**
      * display the text sent by the App to the user interface
-     * @param answer the text to display to the user
-     * @see UserInterface#writeAnswer(String)
+     * @param information the text to display to the user
+     * @see UserInterface#writeInformation(String)
      */
-    public void writeAnswer(String answer) {
+    public void writeInformation(String information) {
         try {
-            userDisplayStream.write(String.format(answer+"%n").getBytes());
+            userDisplayStream.write(String.format(information+"%n").getBytes());
             userDisplayStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void writeTimeline(Timeline timeline) {
+        if (timeline != null){
+            writeInformation(timeline.getMessage());
+            writeTimeline(timeline.getNext());
+        }
+    }
+
+    public void writeWall(Timeline wall) {
+        if (wall != null){
+            writeInformation(wall.getUser()+" - "+wall.getMessage());
+            writeWall(wall.getNext());
+        }
+
     }
 
     /**
@@ -119,7 +137,7 @@ public class ConsoleInterface implements UserInterface{
      */
     private Instruction parseInstruction(String userEntry){
         if (userEntry == null || userEntry.isEmpty()){
-            writeAnswer(UNKNOWN_COMMAND_WARNING);
+            writeInformation(UNKNOWN_COMMAND_WARNING);
         }
         String[] instructionParts = userEntry.split(" ");
         if (instructionParts.length == 1) {
@@ -140,7 +158,7 @@ public class ConsoleInterface implements UserInterface{
         if (instructionParts.length > 2 && instructionParts[1].equals(INSTRUCTION_KEY_FOLLOW)){
             return new Instruction(Action.FOLLOW, instructionParts[0], instructionParts[2]);
         }
-        writeAnswer(UNKNOWN_COMMAND_WARNING);
+        writeInformation(UNKNOWN_COMMAND_WARNING);
         return null;
     }
 
@@ -149,7 +167,7 @@ public class ConsoleInterface implements UserInterface{
      * @see ConsoleInterface#WELCOME_MESSAGE
      */
     private void sayHello() {
-        writeAnswer(WELCOME_MESSAGE);
+        writeInformation(WELCOME_MESSAGE);
     }
 
     /**
@@ -157,7 +175,7 @@ public class ConsoleInterface implements UserInterface{
      * @see ConsoleInterface#GOODBYE_MESSAGE
      */
     private void sayBye() {
-        writeAnswer(GOODBYE_MESSAGE);
+        writeInformation(GOODBYE_MESSAGE);
     }
 
     /**

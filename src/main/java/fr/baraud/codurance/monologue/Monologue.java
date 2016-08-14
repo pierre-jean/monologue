@@ -1,6 +1,14 @@
 package fr.baraud.codurance.monologue;
 
-import fr.baraud.codurance.monologue.console.ConsoleInterface;
+import fr.baraud.codurance.monologue.timelines.SocialStack;
+import fr.baraud.codurance.monologue.timelines.memory.MemorySocialStack;
+import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
+import fr.baraud.codurance.monologue.ui.Action;
+import fr.baraud.codurance.monologue.ui.Instruction;
+import fr.baraud.codurance.monologue.ui.UserInterface;
+
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Monologue is a social networking application.
@@ -10,13 +18,15 @@ import fr.baraud.codurance.monologue.console.ConsoleInterface;
 public class Monologue {
 
 	private final UserInterface userInterface;
+    private final SocialStack socialStack;
 
     /**
      * Create a new instance of the App
      * @param userInterface the User Interface to interact with the users of the App.
      */
-    public Monologue(UserInterface userInterface){
+    public Monologue(UserInterface userInterface, SocialStack socialStack){
         this.userInterface = userInterface;
+        this.socialStack = socialStack;
     }
 
     /**
@@ -28,8 +38,18 @@ public class Monologue {
         Instruction instruction = userInterface.getNextInstruction();
         while (Action.EXIT != instruction.getAction()){
             switch (instruction.getAction()){
-                default:
-                    userInterface.writeAnswer("Action not supported yet");
+                case POST:
+                    socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
+                    break;
+                case SHOW_TIMELINE:
+                    userInterface.writeTimeline(socialStack.getTimeline(instruction.getUser()));
+                    break;
+                case SHOW_WALL:
+                    userInterface.writeWall(socialStack.getTimeline(instruction.getUser()));
+                    break;
+                case FOLLOW:
+                    socialStack.follow(instruction.getUser(), instruction.getContent());
+                    break;
             }
             instruction = userInterface.getNextInstruction();
         }
@@ -41,7 +61,7 @@ public class Monologue {
      * @param args not used for the moment
      */
 	public static void main(String[] args) {
-	    Monologue monologue = new Monologue(new ConsoleInterface(System.in, System.out));
+	    Monologue monologue = new Monologue(new ConsoleInterface(System.in, System.out), new MemorySocialStack(new HashMap<>()));
         monologue.listenInstructions();
     }
 
