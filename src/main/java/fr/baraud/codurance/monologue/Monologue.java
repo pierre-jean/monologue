@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class Monologue {
 
 	private final UserInterface userInterface;
-    private final SocialStack socialStack;
+    private SocialStack socialStack;
 
     /**
      * Create a new instance of the App
@@ -39,16 +39,16 @@ public class Monologue {
         while (Action.EXIT != instruction.getAction()){
             switch (instruction.getAction()){
                 case POST:
-                    socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
+                    socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
                     break;
                 case SHOW_TIMELINE:
                     userInterface.writeTimeline(socialStack.getTimeline(instruction.getUser()));
                     break;
                 case SHOW_WALL:
-                    userInterface.writeWall(socialStack.getTimeline(instruction.getUser()));
+                    userInterface.writeWall(socialStack.getWall(instruction.getUser()));
                     break;
                 case FOLLOW:
-                    socialStack.follow(instruction.getUser(), instruction.getContent());
+                    socialStack = socialStack.follow(instruction.getUser(), instruction.getContent());
                     break;
             }
             instruction = userInterface.getNextInstruction();
