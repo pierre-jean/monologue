@@ -35,8 +35,9 @@ public class Monologue {
      * from any user.
      */
     public void listenInstructions(UserInterface userInterface, SocialStack socialStack){
-        Instruction instruction = userInterface.getNextInstruction();
+        Instruction instruction;
         do {
+            instruction = userInterface.getNextInstruction();
             switch (instruction.getAction()){
             case POST:
                 socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
@@ -70,7 +71,6 @@ public class Monologue {
             case EXIT:
                 break;
             } 
-            instruction = userInterface.getNextInstruction();
         } while (Action.EXIT != instruction.getAction());
         userInterface.close();
     }
