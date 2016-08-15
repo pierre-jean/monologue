@@ -21,23 +21,18 @@ import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
  */
 public class Monologue {
 
-    private final static String CONSOLE_PROPERTIES = "console-interface.properties";
-    private final static String MONOLOGUE_PROPERTIES = "monologue.properties";
+    public final static String CONSOLE_PROPERTIES = "console-interface.properties";
+    public final static String MONOLOGUE_PROPERTIES = "monologue.properties";
 
     private final String property_message_user_not_found = "monologue.user.not.found";
 
     private final Properties monologueProperties;
-    private final UserInterface userInterface;
-    private SocialStack socialStack;
 
     /**
      * Create a new instance of the App
-     * @param userInterface the User Interface to interact with the users of the App.
      */
-    public Monologue(UserInterface userInterface, SocialStack socialStack){
-        this.userInterface = userInterface;
-        this.socialStack = socialStack;
-        this.monologueProperties = Monologue.loadProperties(MONOLOGUE_PROPERTIES);
+    public Monologue(Properties props){
+        this.monologueProperties = props;
     }
 
     /**
@@ -45,7 +40,7 @@ public class Monologue {
      * It will execute the instructions and block until the EXIT command is received
      * from any user.
      */
-    public void listenInstructions(){
+    public void listenInstructions(UserInterface userInterface, SocialStack socialStack){
         Instruction instruction = userInterface.getNextInstruction();
         while (Action.EXIT != instruction.getAction()){
             switch (instruction.getAction()){
@@ -89,9 +84,8 @@ public class Monologue {
      * @param args not used for the moment
      */
     public static void main(String[] args) {
-
-        Monologue monologue = new Monologue(new ConsoleInterface(System.in, System.out, Monologue.loadProperties(CONSOLE_PROPERTIES)), new MemorySocialStack(new HashMap<>()));
-        monologue.listenInstructions();
+        Monologue monologue = new Monologue(loadProperties(MONOLOGUE_PROPERTIES));
+        monologue.listenInstructions(new ConsoleInterface(System.in, System.out,Monologue.loadProperties(CONSOLE_PROPERTIES)), new MemorySocialStack(new HashMap<>()));
     }
 
     public static Properties loadProperties(String filename){

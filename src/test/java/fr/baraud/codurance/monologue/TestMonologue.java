@@ -21,6 +21,6 @@ public class TestMonologue {
         String exitInstruction = "quit";
         ByteArrayInputStream simulatedAliceEntry = new ByteArrayInputStream(String.format((alicePostInstruction+sendInstruction+exitInstruction)).getBytes());
         ConsoleInterface consoleInterface = new ConsoleInterface(simulatedAliceEntry, new ByteArrayOutputStream(), new Properties());
-        new Monologue(consoleInterface, new MemorySocialStack(new HashMap<>()));
+        new Monologue(Monologue.loadProperties(Monologue.MONOLOGUE_PROPERTIES));
     }
 }
