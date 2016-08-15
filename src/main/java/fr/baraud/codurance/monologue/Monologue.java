@@ -22,17 +22,11 @@ import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
 public class Monologue {
 
     public final static String CONSOLE_PROPERTIES = "console-interface.properties";
-    public final static String MONOLOGUE_PROPERTIES = "monologue.properties";
-
-    private final String property_message_user_not_found = "monologue.user.not.found";
-
-    private final Properties monologueProperties;
 
     /**
      * Create a new instance of the App
      */
-    public Monologue(Properties props){
-        this.monologueProperties = props;
+    public Monologue(){
     }
 
     /**
@@ -50,7 +44,7 @@ public class Monologue {
             case SHOW_TIMELINE:
                 Timeline timeline = socialStack.getTimeline(instruction.getUser());
                 if (timeline == null){
-                    userInterface.writeInformation(monologueProperties.getProperty(property_message_user_not_found));
+                    userInterface.writeWarningUnknownUser(instruction.getUser());
                 } else {
                     userInterface.writeTimeline(timeline, new Date());
                 }
@@ -58,7 +52,7 @@ public class Monologue {
             case SHOW_WALL:
                 Timeline wall = socialStack.getWall(instruction.getUser());
                 if (wall == null){
-                    userInterface.writeInformation(monologueProperties.getProperty(property_message_user_not_found));
+                    userInterface.writeWarningUnknownUser(instruction.getUser());
                 } else {
                     userInterface.writeWall(wall, new Date());                		
                 }
@@ -66,7 +60,7 @@ public class Monologue {
             case FOLLOW:
                 SocialStack after = socialStack.follow(instruction.getUser(), instruction.getContent());
                 if (after == socialStack){
-                    userInterface.writeInformation(monologueProperties.getProperty(property_message_user_not_found));
+                    userInterface.writeWarningUnknownUser(instruction.getUser());
                 } else{
                     socialStack = after;
                 }
@@ -84,7 +78,7 @@ public class Monologue {
      * @param args not used for the moment
      */
     public static void main(String[] args) {
-        Monologue monologue = new Monologue(loadProperties(MONOLOGUE_PROPERTIES));
+        Monologue monologue = new Monologue();
         monologue.listenInstructions(new ConsoleInterface(System.in, System.out,Monologue.loadProperties(CONSOLE_PROPERTIES)), new MemorySocialStack(new HashMap<>()));
     }
 

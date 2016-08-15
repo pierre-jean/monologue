@@ -29,6 +29,7 @@ public class ConsoleInterface implements UserInterface{
     public final static String property_message_goodbye= "ui.console.message.goodbye";
     public final static String property_message_help= "ui.console.message.help";
     public final static String property_message_unknown_command= "ui.console.message.unknown.command";
+    public final static String property_message_unknown_user = "ui.console.message.unknown.user";
     public final static String property_instruction_post= "ui.console.instructions.post";
     public final static String property_instruction_wall= "ui.console.instructions.wall";
     public final static String property_instruction_follow= "ui.console.instructions.follow";
@@ -100,6 +101,10 @@ public class ConsoleInterface implements UserInterface{
 
     public void writeHelp(){
         writeInformation(properties.getProperty(property_message_help));
+    }
+    
+    public void writeWarningUnknownUser(String user) {
+        writeInformation(properties.getProperty(property_message_unknown_user)+user);
     }
 
     public void writeTimeline(Timeline timeline, Date currentTime) {
@@ -213,4 +218,5 @@ public class ConsoleInterface implements UserInterface{
     public void close() {
         sayBye();
     }
+
 }

@@ -191,6 +191,16 @@ public class TestConsoleInterface {
         consoleInterface.writeHelp();
         assertEquals(String.format(props.getProperty(ConsoleInterface.property_message_help)+"%n"),out.toString());
     }
+    
+    @Test
+    public void TestUnkownUser(){
+        ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
+        out.reset();
+        consoleInterface.writeWarningUnknownUser("Elliot");
+        assertEquals(String.format(props.getProperty(ConsoleInterface.property_message_unknown_user)+"Elliot%n"),out.toString());
+    }
 
     @Test
     public void TestWriteWall(){
