@@ -1,6 +1,8 @@
 Monologue
 =========
 
+![Monologue logo](assets/logo.png)
+
 Monologue is a console-based social networking application.
 The application is an exercise to demonstrate coding style, and is not intended for production use.
 
@@ -9,12 +11,12 @@ Limitations
 
  * The application doesn't work over the network, and all the users must share the same terminal.
  * Users are created on the fly from their first posts, and no pre-defined list of users exists.
- * Invalid commands are not handled by the application
+ * The messages are in memory only and lost every time app is stopped.
  
 How to run
 ----------
 
-You need a [Java JDK][jdk-link] and [Maven][maven-link] to run the app.
+You need a [Java JDK 8 or newer][jdk-link] and [Maven][maven-link] to run the app.
 
 * To package: `mvn package`
 
