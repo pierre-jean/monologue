@@ -83,6 +83,14 @@ public class TestConsoleInterface {
     }
 
     @Test
+    public void testHelpInstruction(){
+        String help = String.format("?%n");
+        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(help.getBytes()), new ByteArrayOutputStream(), props);
+        Instruction instruction = userInterface.getNextInstruction();
+        assertEquals(Action.HELP, instruction.getAction());
+    }
+
+    @Test
     public void testUnknownEscapeInstruction(){
         String wrongInstruction1 = String.format("%n");
         String wrongInstruction2 = String.format("wall Alice%n");
@@ -172,6 +180,16 @@ public class TestConsoleInterface {
         consoleInterface.writeTimeline(timeline4, now);
         String result = String.format("Indeed, there is (5 seconds ago)%nHello (10 seconds ago)%n");
         assertEquals(result, out.toString());
+    }
+
+    @Test
+    public void TestWriteHelp(){
+        ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
+        out.reset();
+        consoleInterface.writeHelp();
+        assertEquals(String.format(props.getProperty(ConsoleInterface.property_message_help)+"%n"),out.toString());
     }
 
     @Test

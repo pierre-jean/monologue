@@ -42,6 +42,11 @@ public interface UserInterface {
     void writeWall(Timeline wall, Date currentTime);
 
     /**
+     * Print help for user
+     */
+    void writeHelp();
+
+    /**
      * Close the user interface
      * To call before leaving the app, to close any open connection
      * and to give a notice to the user of the closing of the app

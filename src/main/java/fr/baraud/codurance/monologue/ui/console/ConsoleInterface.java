@@ -27,10 +27,12 @@ public class ConsoleInterface implements UserInterface{
     public final static String property_message_logo = "ui.console.message.logo";
     public final static String property_message_welcome = "ui.console.message.welcome";
     public final static String property_message_goodbye= "ui.console.message.goodbye";
+    public final static String property_message_help= "ui.console.message.help";
     public final static String property_message_unknown_command= "ui.console.message.unknown.command";
     public final static String property_instruction_post= "ui.console.instructions.post";
     public final static String property_instruction_wall= "ui.console.instructions.wall";
     public final static String property_instruction_follow= "ui.console.instructions.follow";
+    public final static String property_instruction_help="ui.console.instructions.help";
     public final static String property_instruction_quit= "ui.console.instructions.quit";
     public final static String property_instruction_split="ui.console.instructions.split";
     public final static String property_display_instruction = "ui.console.display.instruction";
@@ -94,6 +96,10 @@ public class ConsoleInterface implements UserInterface{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void writeHelp(){
+        writeInformation(properties.getProperty(property_message_help));
     }
 
     public void writeTimeline(Timeline timeline, Date currentTime) {
@@ -163,6 +169,9 @@ public class ConsoleInterface implements UserInterface{
         if (instructionParts.length == 1) {
             if (instructionParts[0].equals(properties.getProperty(property_instruction_quit))){
                 return new Instruction(Action.EXIT, null, null);
+            }
+            if (instructionParts[0].equals(properties.getProperty(property_instruction_help))){
+                return new Instruction(Action.HELP, null, null);
             }
             if (instructionParts[0].length() == 0){
                 return null;

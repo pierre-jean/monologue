@@ -6,5 +6,5 @@ package fr.baraud.codurance.monologue.ui;
  */
 
 public enum Action {
-    POST, FOLLOW, SHOW_TIMELINE, SHOW_WALL, EXIT
+    POST, FOLLOW, SHOW_TIMELINE, SHOW_WALL, HELP, EXIT
 }

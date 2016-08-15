@@ -55,6 +55,8 @@ public class Monologue {
                 case FOLLOW:
                     socialStack = socialStack.follow(instruction.getUser(), instruction.getContent());
                     break;
+                case HELP:
+                    userInterface.writeHelp();
             }
             instruction = userInterface.getNextInstruction();
         }
