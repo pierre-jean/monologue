@@ -20,13 +20,6 @@ public interface UserInterface {
     Instruction getNextInstruction();
 
     /**
-     * Send an information message to the user
-     * @param information is a text message to the user
-     */
-    void writeInformation(String information);
-
-
-    /**
      * Send and display the timeline of an user
      * @param timeline to display
      * @param currentTime the current time, used to print the delay since the post was created

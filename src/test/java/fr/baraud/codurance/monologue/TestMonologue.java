@@ -2,12 +2,8 @@ package fr.baraud.codurance.monologue;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,11 +11,9 @@ import org.junit.Test;
 
 import fr.baraud.codurance.monologue.timelines.SocialStack;
 import fr.baraud.codurance.monologue.timelines.Timeline;
-import fr.baraud.codurance.monologue.timelines.memory.MemorySocialStack;
 import fr.baraud.codurance.monologue.ui.Action;
 import fr.baraud.codurance.monologue.ui.Instruction;
 import fr.baraud.codurance.monologue.ui.UserInterface;
-import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
 
 /**
  * Created by animus on 13/08/16.
@@ -87,7 +81,7 @@ public class TestMonologue {
         MockUI ui = new MockUI(Arrays.asList(new Instruction[]{showHelp}));
         MockSocialStack socialStack =  new MockSocialStack(null);
         monologue.listenInstructions(ui, socialStack);
-        assertEquals("Help", ui.lastWrittenInfo);
+        assertEquals("Help", ui.lastWrittenHelp);
     }
     
     @Test
@@ -157,12 +151,10 @@ public class TestMonologue {
     private class MockUI implements UserInterface {
         
         public Iterator<Instruction> instIterator;
-        
-        public String lastWrittenInfo;
         public Timeline lastWrittenTimeline;
-        public Timeline lastWrittenWall;
-        
+        public Timeline lastWrittenWall;        
         public String unknownUser;
+        public String lastWrittenHelp;
         
         public MockUI(List<Instruction> instructions) {
             instIterator = instructions.iterator();
@@ -177,11 +169,6 @@ public class TestMonologue {
         }
 
         @Override
-        public void writeInformation(String information) {
-            this.lastWrittenInfo = information;
-        }
-
-        @Override
         public void writeTimeline(Timeline timeline, Date currentTime) {
             this.lastWrittenTimeline = timeline;
         }
@@ -193,7 +180,7 @@ public class TestMonologue {
 
         @Override
         public void writeHelp() {
-            this.lastWrittenInfo = "Help";
+            this.lastWrittenHelp = "Help";
         }
         
         @Override

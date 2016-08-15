@@ -8,7 +8,6 @@ import fr.baraud.codurance.monologue.ui.UserInterface;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Scanner;
@@ -74,12 +73,7 @@ public class ConsoleInterface implements UserInterface{
     public Instruction getNextInstruction() {
         Instruction userInstruction;
         do {
-            try {
-                userDisplayStream.write(properties.getProperty(property_display_instruction).getBytes());
-                userDisplayStream.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            write(properties.getProperty(property_display_instruction), false);
             userInstruction = parseInstruction(userInputScanner.nextLine());
         } while (userInstruction == null);
         return userInstruction;
@@ -90,7 +84,7 @@ public class ConsoleInterface implements UserInterface{
      * @param information the text to display to the user
      * @see UserInterface#writeInformation(String)
      */
-    public void writeInformation(String information) {
+    private void write(String information, boolean includeLineReturn) {
         try {
             userDisplayStream.write(String.format(information+"%n").getBytes());
             userDisplayStream.flush();
@@ -100,23 +94,23 @@ public class ConsoleInterface implements UserInterface{
     }
 
     public void writeHelp(){
-        writeInformation(properties.getProperty(property_message_help));
+        write(properties.getProperty(property_message_help), true);
     }
     
     public void writeWarningUnknownUser(String user) {
-        writeInformation(properties.getProperty(property_message_unknown_user)+user);
+        write(properties.getProperty(property_message_unknown_user)+user, true);
     }
 
     public void writeTimeline(Timeline timeline, Date currentTime) {
         if (timeline != null){
-            writeInformation(timeline.getMessage()+ " ("+printDelay(timeline.getMessageTimestamp(), currentTime)+")");
+            write(timeline.getMessage()+ " ("+printDelay(timeline.getMessageTimestamp(), currentTime)+")", true);
             writeTimeline(timeline.getNext(), currentTime);
         }
     }
 
     public void writeWall(Timeline wall, Date currentTime) {
         if (wall != null){
-            writeInformation(wall.getUser()+" - "+wall.getMessage()+ " ("+printDelay(wall.getMessageTimestamp(), currentTime)+")");
+            write(wall.getUser()+" - "+wall.getMessage()+ " ("+printDelay(wall.getMessageTimestamp(), currentTime)+")", true);
             writeWall(wall.getNext(), currentTime);
         }
 
@@ -168,7 +162,7 @@ public class ConsoleInterface implements UserInterface{
      */
     protected Instruction parseInstruction(String userEntry){
         if (userEntry == null || userEntry.isEmpty()){
-            writeInformation(properties.getProperty(property_message_unknown_command));
+            write(properties.getProperty(property_message_unknown_command), true);
         }
         String[] instructionParts = userEntry.split(properties.getProperty(property_instruction_split));
         if (instructionParts.length == 1) {
@@ -192,7 +186,7 @@ public class ConsoleInterface implements UserInterface{
         if (instructionParts.length > 2 && instructionParts[1].equals(properties.getProperty(property_instruction_follow))){
             return new Instruction(Action.FOLLOW, instructionParts[0], instructionParts[2]);
         }
-        writeInformation(properties.getProperty(property_message_unknown_command));
+        write(properties.getProperty(property_message_unknown_command), true);
         return null;
     }
 
@@ -200,15 +194,15 @@ public class ConsoleInterface implements UserInterface{
      * Display to the interface the welcome message
      */
     private void sayHello() {
-        writeInformation(properties.getProperty(property_message_logo));
-        writeInformation(properties.getProperty(property_message_welcome));
+        write(properties.getProperty(property_message_logo), true);
+        write(properties.getProperty(property_message_welcome), true);
     }
 
     /**
      * Display to the interface the goodbye message
      */
     private void sayBye() {
-        writeInformation(properties.getProperty(property_message_goodbye));
+        write(properties.getProperty(property_message_goodbye), true);
     }
 
     /**

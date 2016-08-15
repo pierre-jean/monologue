@@ -67,6 +67,8 @@ public class Monologue {
                 break;
             case HELP:
                 userInterface.writeHelp();
+            case EXIT:
+                break;
             }
             instruction = userInterface.getNextInstruction();
         }

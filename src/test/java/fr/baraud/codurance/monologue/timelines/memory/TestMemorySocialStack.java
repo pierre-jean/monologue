@@ -3,14 +3,12 @@ package fr.baraud.codurance.monologue.timelines.memory;
 import fr.baraud.codurance.monologue.timelines.SocialStack;
 import fr.baraud.codurance.monologue.timelines.Timeline;
 import fr.baraud.codurance.monologue.timelines.User;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by animus on 14/08/16.
