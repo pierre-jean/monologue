@@ -21,7 +21,7 @@ public interface UserInterface {
 
     /**
      * Send an information message to the user
-     * @param information is a text message to inform the user
+     * @param information is a text message to the user
      */
     void writeInformation(String information);
 
