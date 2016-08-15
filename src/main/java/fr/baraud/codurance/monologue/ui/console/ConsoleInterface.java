@@ -86,7 +86,10 @@ public class ConsoleInterface implements UserInterface{
      */
     private void write(String information, boolean includeLineReturn) {
         try {
-            userDisplayStream.write(String.format(information+"%n").getBytes());
+            if (includeLineReturn){
+                information = information + "%n";
+            }
+            userDisplayStream.write(String.format(information).getBytes());
             userDisplayStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
