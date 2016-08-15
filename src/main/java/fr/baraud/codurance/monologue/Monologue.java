@@ -1,17 +1,18 @@
 package fr.baraud.codurance.monologue;
 
-import fr.baraud.codurance.monologue.timelines.SocialStack;
-import fr.baraud.codurance.monologue.timelines.memory.MemorySocialStack;
-import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
-import fr.baraud.codurance.monologue.ui.Action;
-import fr.baraud.codurance.monologue.ui.Instruction;
-import fr.baraud.codurance.monologue.ui.UserInterface;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
+
+import fr.baraud.codurance.monologue.timelines.SocialStack;
+import fr.baraud.codurance.monologue.timelines.Timeline;
+import fr.baraud.codurance.monologue.timelines.memory.MemorySocialStack;
+import fr.baraud.codurance.monologue.ui.Action;
+import fr.baraud.codurance.monologue.ui.Instruction;
+import fr.baraud.codurance.monologue.ui.UserInterface;
+import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
 
 /**
  * Monologue is a social networking application.
@@ -21,8 +22,12 @@ import java.util.Properties;
 public class Monologue {
 
     private final static String CONSOLE_PROPERTIES = "console-interface.properties";
+    private final static String MONOLOGUE_PROPERTIES = "monologue.properties";
 
-	private final UserInterface userInterface;
+    private final String property_message_user_not_found = "monologue.user.not.found";
+
+    private final Properties monologueProperties;
+    private final UserInterface userInterface;
     private SocialStack socialStack;
 
     /**
@@ -32,6 +37,7 @@ public class Monologue {
     public Monologue(UserInterface userInterface, SocialStack socialStack){
         this.userInterface = userInterface;
         this.socialStack = socialStack;
+        this.monologueProperties = Monologue.loadProperties(MONOLOGUE_PROPERTIES);
     }
 
     /**
@@ -43,20 +49,35 @@ public class Monologue {
         Instruction instruction = userInterface.getNextInstruction();
         while (Action.EXIT != instruction.getAction()){
             switch (instruction.getAction()){
-                case POST:
-                    socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
-                    break;
-                case SHOW_TIMELINE:
-                    userInterface.writeTimeline(socialStack.getTimeline(instruction.getUser()), new Date());
-                    break;
-                case SHOW_WALL:
-                    userInterface.writeWall(socialStack.getWall(instruction.getUser()), new Date());
-                    break;
-                case FOLLOW:
-                    socialStack = socialStack.follow(instruction.getUser(), instruction.getContent());
-                    break;
-                case HELP:
-                    userInterface.writeHelp();
+            case POST:
+                socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
+                break;
+            case SHOW_TIMELINE:
+                Timeline timeline = socialStack.getTimeline(instruction.getUser());
+                if (timeline == null){
+                    userInterface.writeInformation(monologueProperties.getProperty(property_message_user_not_found));
+                } else {
+                    userInterface.writeTimeline(timeline, new Date());
+                }
+                break;
+            case SHOW_WALL:
+                Timeline wall = socialStack.getWall(instruction.getUser());
+                if (wall == null){
+                    userInterface.writeInformation(monologueProperties.getProperty(property_message_user_not_found));
+                } else {
+                    userInterface.writeWall(wall, new Date());                		
+                }
+                break;
+            case FOLLOW:
+                SocialStack after = socialStack.follow(instruction.getUser(), instruction.getContent());
+                if (after == socialStack){
+                    userInterface.writeInformation(monologueProperties.getProperty(property_message_user_not_found));
+                } else{
+                    socialStack = after;
+                }
+                break;
+            case HELP:
+                userInterface.writeHelp();
             }
             instruction = userInterface.getNextInstruction();
         }
@@ -67,16 +88,21 @@ public class Monologue {
      * Runs a new instance a the app with a console interface handler
      * @param args not used for the moment
      */
-	public static void main(String[] args) {
+    public static void main(String[] args) {
+
+        Monologue monologue = new Monologue(new ConsoleInterface(System.in, System.out, Monologue.loadProperties(CONSOLE_PROPERTIES)), new MemorySocialStack(new HashMap<>()));
+        monologue.listenInstructions();
+    }
+
+    public static Properties loadProperties(String filename){
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties props = new Properties();
-        try(InputStream resourceStream = loader.getResourceAsStream(CONSOLE_PROPERTIES)) {
+        try(InputStream resourceStream = loader.getResourceAsStream(filename)) {
             props.load(resourceStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Monologue monologue = new Monologue(new ConsoleInterface(System.in, System.out, props), new MemorySocialStack(new HashMap<>()));
-        monologue.listenInstructions();
+        return props;
     }
 
 }
