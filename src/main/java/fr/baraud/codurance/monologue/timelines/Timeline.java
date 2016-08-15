@@ -4,7 +4,10 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Created by animus on 13/08/16.
+ * A Timeline is an immutable representation of the post of the users.
+ * A timeline is linked to the previous post via the getNext() method.
+ * If a new post is created, a new timeline should be instanciated a this one
+ * should be set as the next of the new instance.
  */
 public class Timeline implements Comparable<Timeline>{
     private final String message;
@@ -12,6 +15,12 @@ public class Timeline implements Comparable<Timeline>{
     private final Date messageTimestamp;
     private final Timeline next;
 
+    /**
+     * @param message the message of the post
+     * @param user the author of the post
+     * @param messageTimestamp the time the post was sent
+     * @param next the previous message in the personal timeline of this user
+     */
     public Timeline(String message, String user, Date messageTimestamp, Timeline next){
         this.message = message;
         this.user = user;
@@ -35,6 +44,10 @@ public class Timeline implements Comparable<Timeline>{
         return next;
     }
 
+    /**
+     * A timeline will be considered equal with another one only
+     * if all posted messages, authors, and timestamps are equal
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o){
@@ -58,6 +71,11 @@ public class Timeline implements Comparable<Timeline>{
         return  Objects.hash(message, user, messageTimestamp);
     }
 
+    /**
+     * A timeline is ordered by its timestamp first (newer is bigger)
+     * then the alphabetical order of the author, then the alphabetical order
+     * of the message
+     */
     public int compareTo(Timeline timeline) {
         if (timeline == null ){
             throw new NullPointerException();

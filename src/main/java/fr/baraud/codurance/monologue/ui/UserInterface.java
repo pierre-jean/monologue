@@ -22,7 +22,8 @@ public interface UserInterface {
     /**
      * Send and display the timeline of an user
      * @param timeline to display
-     * @param currentTime the current time, used to print the delay since the post was created
+     * @param currentTime the current time, used to print the delay since the 
+     * post was created
      */
     void writeTimeline(Timeline timeline, Date currentTime);
 
@@ -30,7 +31,8 @@ public interface UserInterface {
      * Send and display the wall of an user,
      * aggregation of multiple users' timelines
      * @param wall
-     * @param currentTime the current time, used to print the delay since the post was created
+     * @param currentTime the current time, used to print the delay since the 
+     * post was created
      */
     void writeWall(Timeline wall, Date currentTime);
 

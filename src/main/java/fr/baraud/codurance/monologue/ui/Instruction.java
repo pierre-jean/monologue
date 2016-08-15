@@ -2,7 +2,8 @@ package fr.baraud.codurance.monologue.ui;
 
 /**
  * An instruction is an user action and its associated parameters
- * It encapsulate all information sent by the user to interact with the app
+ * It encapsulate all information sent by the user to interact with the 
+ * application
  */
 public class Instruction {
 
@@ -13,11 +14,14 @@ public class Instruction {
     /**
      *
      * @param action the type of action of this instruction. Mandatory.
-     * @param user the user is a mandatory parameter for action SHOW_TIMELINE, SHOW_WALL, POST, AND FOLLOWS
-     *             For FOLLOW, the user represents the subject that wants to follow another user. User can be null
-     *             in other cases.
-     * @param content the content of the instruction. For actions POST, it represents the text to post. For actions
-     *                FOLLOW, it represents the user that is followed. Can be null in other cases.
+     * @param user the user is a mandatory parameter for actions 
+     * SHOW_TIMELINE, SHOW_WALL, POST, AND FOLLOWS. 
+     * For FOLLOW, the user represents the subject that wants to follow another 
+     * user. 
+     * User can be null in other cases.
+     * @param content the content of the instruction. For action POST, it 
+     * represents the text to post. For action FOLLOW, it represents the user 
+     * that is followed. Null otherwise.
      */
     public Instruction(Action action, String user, String content){
         this.action = action;
@@ -36,7 +40,8 @@ public class Instruction {
 
     /**
      * Returns the user for this action
-     * For Action SHOW_TIMELINE, SHOW_WALL, represents the user targeted by the action.
+     * For Action SHOW_TIMELINE, SHOW_WALL, represents the user targeted by 
+     * the action.
      * For Action POST represents the author of the post.
      * For Action FOLLOW represents the author that wants to follow another user.
      * @return the User for this action

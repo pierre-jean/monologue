@@ -17,7 +17,7 @@ import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
 /**
  * Monologue is a social networking application.
  * To interact with the App, you can create a new Instance of this class
- * and call #listenInstructions()
+ * and call #listenInstructions(UserInterface userInterface, SocialStack socialStack)
  */
 public class Monologue {
 
@@ -33,6 +33,10 @@ public class Monologue {
      * listenInstructions will wait and loop on user instructions.
      * It will execute the instructions and block until the EXIT command is received
      * from any user.
+     * @param userInterface the user interface that interact with user
+     * @param socialStack the database of users and timelines
+     * @see fr.baraud.codurance.monologue.timelines.SocialStack
+     * @see fr.baraud.codurance.monologue.ui.UserInterface
      */
     public void listenInstructions(UserInterface userInterface, SocialStack socialStack){
         Instruction instruction;
@@ -77,7 +81,6 @@ public class Monologue {
 
     /**
      * Runs a new instance a the app with a console interface handler
-     * @param args not used for the moment
      */
     public static void main(String[] args) {
         Monologue monologue = new Monologue();
@@ -90,6 +93,12 @@ public class Monologue {
         monologue.listenInstructions(new ConsoleInterface(System.in, System.out, consoleProps), new MemorySocialStack(new HashMap<>()));
     }
 
+    /**
+     * Helper to load a property within the classpath from its filename
+     * @param filename the file name if it is in the resource folder, or the file path
+     * @return a property file
+     * @throws IOException
+     */
     public static Properties loadProperties(String filename) throws IOException{
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties props = new Properties();

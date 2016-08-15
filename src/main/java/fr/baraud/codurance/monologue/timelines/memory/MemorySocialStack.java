@@ -7,16 +7,32 @@ import fr.baraud.codurance.monologue.timelines.User;
 import java.util.*;
 
 /**
- * Created by animus on 13/08/16.
+ * MemorySocialStack is a representation of a state of the history of Monologue
+ * App. It contains all the users and their timelines at this state.
+ * It does not store this info in a database so once it's no longer referenced
+ * it is removed from the memory and the state is lost.
+ * It is immutable, so if the state change, a new instance should be created.
  */
 public class MemorySocialStack implements SocialStack {
 
+    /**
+     * A list of users indexed by their name.
+     * @see fr.baraud.codurance.monologue.timelines.User
+     */
     private final Map<String, User> users;
 
+    /**
+     * An existing list of users, that can be the result of a previous state
+     * @param users existing users, can be an empty list but should not be null
+     */
     public MemorySocialStack(Map<String, User> users){
         this.users = users;
     }
 
+    /**
+     * @see fr.baraud.codurance.monologue.timelines.SocialStack#post(String, String, Date)
+     */
+    @Override
     public SocialStack post(String username, String message, Date messageTimestamp){
         if (message == null || message.isEmpty()){
             return this;
@@ -32,11 +48,19 @@ public class MemorySocialStack implements SocialStack {
         return new MemorySocialStack(newUsers);
     }
 
+    /**
+     * @see fr.baraud.codurance.monologue.timelines.SocialStack#getTimeline(String)
+     */
+    @Override
     public Timeline getTimeline(String username){
         User user = users.get(username);
         return user != null? user.getTimeline() : null;
     }
 
+    /**
+     * @see fr.baraud.codurance.monologue.timelines.SocialStack#getWall(String)
+     */
+    @Override
     public Timeline getWall(String username){
         User user = users.get(username);
         if (user == null){
@@ -50,6 +74,9 @@ public class MemorySocialStack implements SocialStack {
         return buildWall(allTimeline);
     }
 
+    /**
+     * @see fr.baraud.codurance.monologue.timelines.SocialStack#follow(String, String)
+     */
     public SocialStack follow(String username, String following){
         User user = users.get(username);
         User toFollow = users.get(following);
@@ -65,6 +92,11 @@ public class MemorySocialStack implements SocialStack {
         return this;
     }
 
+    /**
+     * Create the aggregation of posts ordered by their timestamp into one timeline
+     * @param followingAndPersonal the list of timeline to aggregate into one wall
+     * @return a wall as a timeline of one or several users posts
+     */
     private Timeline buildWall(TreeSet<Timeline> followingAndPersonal){
         if (followingAndPersonal.isEmpty()){
             return null;
