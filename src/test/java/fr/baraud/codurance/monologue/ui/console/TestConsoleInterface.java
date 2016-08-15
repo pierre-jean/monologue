@@ -4,14 +4,14 @@ import fr.baraud.codurance.monologue.timelines.Timeline;
 import fr.baraud.codurance.monologue.ui.Action;
 import fr.baraud.codurance.monologue.ui.Instruction;
 import fr.baraud.codurance.monologue.ui.UserInterface;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Date;
+import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -20,11 +20,26 @@ import static org.junit.Assert.assertTrue;
  * Created by animus on 13/08/16.
  */
 public class TestConsoleInterface {
+    private final static String consolePropertyName = "console-interface.properties";
+
+    private Properties props;
+
+    @Before
+    public void loadProperties(){
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        props = new Properties();
+        try(InputStream resourceStream = loader.getResourceAsStream(consolePropertyName)) {
+            props.load(resourceStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Test
     public void testPostInstruction(){
         String alicePost = String.format("Alice -> The sky is blue%n");
-        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(alicePost.getBytes()), new ByteArrayOutputStream());
+        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(alicePost.getBytes()), new ByteArrayOutputStream(), props);
         Instruction instruction = userInterface.getNextInstruction();
         assertEquals(Action.POST, instruction.getAction());
         assertEquals("Alice", instruction.getUser());
@@ -34,7 +49,7 @@ public class TestConsoleInterface {
     @Test
     public void testReadInstruction(){
         String aliceTimeline = String.format("Alice%n");
-        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceTimeline.getBytes()), new ByteArrayOutputStream());
+        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceTimeline.getBytes()), new ByteArrayOutputStream(), props);
         Instruction instruction = userInterface.getNextInstruction();
         assertEquals(Action.SHOW_TIMELINE, instruction.getAction());
         assertEquals("Alice", instruction.getUser());
@@ -43,7 +58,7 @@ public class TestConsoleInterface {
     @Test
     public void testWallInstruction(){
         String aliceWall = String.format("Alice wall%n");
-        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceWall.getBytes()), new ByteArrayOutputStream());
+        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceWall.getBytes()), new ByteArrayOutputStream(), props);
         Instruction instruction = userInterface.getNextInstruction();
         assertEquals(Action.SHOW_WALL, instruction.getAction());
         assertEquals("Alice", instruction.getUser());
@@ -52,7 +67,7 @@ public class TestConsoleInterface {
     @Test
     public void testFollowInstruction(){
         String aliceFollowsBob = String.format("Alice follows Bob%n");
-        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceFollowsBob.getBytes()), new ByteArrayOutputStream());
+        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceFollowsBob.getBytes()), new ByteArrayOutputStream(), props);
         Instruction instruction = userInterface.getNextInstruction();
         assertEquals(Action.FOLLOW, instruction.getAction());
         assertEquals("Alice", instruction.getUser());
@@ -62,7 +77,7 @@ public class TestConsoleInterface {
     @Test
     public void testExitInstruction(){
         String exit = String.format("quit%n");
-        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(exit.getBytes()), new ByteArrayOutputStream());
+        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(exit.getBytes()), new ByteArrayOutputStream(), props);
         Instruction instruction = userInterface.getNextInstruction();
         assertEquals(Action.EXIT, instruction.getAction());
     }
@@ -73,26 +88,26 @@ public class TestConsoleInterface {
         String wrongInstruction2 = String.format("wall Alice%n");
         String aliceRead = String.format("Alice%n");
         OutputStream out = new ByteArrayOutputStream();
-        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(String.format(wrongInstruction1+wrongInstruction2+aliceRead).getBytes()), out);
+        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(String.format(wrongInstruction1+wrongInstruction2+aliceRead).getBytes()), out, props);
         Instruction instruction = userInterface.getNextInstruction();
         assertEquals(Action.SHOW_TIMELINE, instruction.getAction());
         assertEquals("Alice", instruction.getUser());
-        assertTrue(out.toString().contains(ConsoleInterface.UNKNOWN_COMMAND_WARNING));
+        assertTrue(out.toString().contains(props.getProperty(ConsoleInterface.property_message_unknown_command)));
     }
 
     @Test
     public void testCloseUserInterface(){
         OutputStream out = new ByteArrayOutputStream();
-        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream("".getBytes()), out);
+        UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream("".getBytes()), out, props);
         userInterface.close();
-        assertTrue(out.toString().contains(String.format(ConsoleInterface.GOODBYE_MESSAGE)));
+        assertTrue(out.toString().contains(String.format(props.getProperty(ConsoleInterface.property_message_goodbye))));
     }
 
     @Test
     public void Test1secFormatting(){
         ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ConsoleInterface consoleInterface = new ConsoleInterface(in, out);
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         assertEquals("1 second ago", consoleInterface.printInUnit(1, 1, "second"));
     }
 
@@ -100,7 +115,7 @@ public class TestConsoleInterface {
     public void Test2secFormatting(){
         ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ConsoleInterface consoleInterface = new ConsoleInterface(in, out);
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         assertEquals("2 seconds ago", consoleInterface.printInUnit(275, 100, "second"));
     }
 
@@ -108,7 +123,7 @@ public class TestConsoleInterface {
     public void TestPrintDelay(){
         ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ConsoleInterface consoleInterface = new ConsoleInterface(in, out);
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         assertEquals("25 seconds ago", consoleInterface.printDelay(new Date(1400000000000l), new Date(1400000025000l)));
         assertEquals("2 minutes ago", consoleInterface.printDelay(new Date(1400000000000l), new Date(1400000120000l)));
         assertEquals("1 hour ago", consoleInterface.printDelay(new Date(1400000000000l), new Date(1400003700000l)));
@@ -121,7 +136,7 @@ public class TestConsoleInterface {
     public void TestWrongDateThrowException(){
         ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ConsoleInterface consoleInterface = new ConsoleInterface(in, out);
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         assertEquals("25 seconds ago", consoleInterface.printDelay(new Date(1400000000000l), new Date(1400000025000l)));
         assertEquals("2 minutes ago", consoleInterface.printDelay(new Date(1400000000000l), new Date(1400000120000l)));
         assertEquals("1 hour ago", consoleInterface.printDelay(new Date(1400000000000l), new Date(1400003700000l)));
@@ -137,7 +152,7 @@ public class TestConsoleInterface {
     public void TestCompareNullPointerException() {
         ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ConsoleInterface consoleInterface = new ConsoleInterface(in, out);
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         exception.expect(IllegalArgumentException.class);
         consoleInterface.printDelay(new Date(1550000000000l), new Date(1400000000000l));
     }
@@ -146,7 +161,7 @@ public class TestConsoleInterface {
     public void TestWriteTimeline(){
         ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ConsoleInterface consoleInterface = new ConsoleInterface(in, out);
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         String aliceName = "Alice";
         Date date1 = new Date(1471100010000l);
         Date date4 = new Date(1471100015000l);
@@ -163,7 +178,7 @@ public class TestConsoleInterface {
     public void TestWriteWall(){
         ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ConsoleInterface consoleInterface = new ConsoleInterface(in, out);
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         String aliceName = "Alice";
         String johnName = "John";
         String bobName = "Bob";

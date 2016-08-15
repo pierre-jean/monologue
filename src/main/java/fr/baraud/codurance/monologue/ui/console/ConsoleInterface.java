@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -21,52 +22,23 @@ import java.util.Scanner;
 public class ConsoleInterface implements UserInterface{
 
     /**
-     * A message displayed to welcome user when launching the interface and provide some guidance
+     *
      */
-    public static final String WELCOME_MESSAGE = "%nWelcome to Monologue "
-            + "%n------------------"
-            + "%nUsage:"
-            + "%n"
-            + "%n - To post:"
-            + "%n   <username> -> <message>"
-            + "%n"
-            + "%n - To read:"
-            + "%n   <user name>"
-            + "%n"
-            + "%n - To follow:"
-            + "%n   <user name> follows <another user>"
-            + "%n"
-            + "%n - To display wall:"
-            + "%n   <user name> wall"
-            + "%n"
-            + "%n - To quit:"
-            + "%n   quit"
-            + "%n------------------"
-            + "%n";
+    public final static String property_message_logo = "ui.console.message.logo";
+    public final static String property_message_welcome = "ui.console.message.welcome";
+    public final static String property_message_goodbye= "ui.console.message.goodbye";
+    public final static String property_message_unknown_command= "ui.console.message.unknown.command";
+    public final static String property_instruction_post= "ui.console.instructions.post";
+    public final static String property_instruction_wall= "ui.console.instructions.wall";
+    public final static String property_instruction_follow= "ui.console.instructions.follow";
+    public final static String property_instruction_quit= "ui.console.instructions.quit";
+    public final static String property_instruction_split="ui.console.instructions.split";
+    public final static String property_display_instruction = "ui.console.display.instruction";
 
     /**
-     * A message sent when closing the interface (and the app)
+     * The properties that contains messages and display custom patters
      */
-    public static final String GOODBYE_MESSAGE = "%n%nThank you for using Monologue%n%n";
-
-    /**
-     * A warning message for unrecognized command pattern
-     */
-    public static final String UNKNOWN_COMMAND_WARNING = "Unknown command";
-
-    /**
-     * Some pattern elements to recognized which action is triggered by the user
-     */
-    private final String INSTRUCTION_KEY_POST = "->";
-    private final String INSTRUCTION_KEY_FOLLOW = "follows";
-    private final String INSTRUCTION_KEY_WALL = "wall";
-    private final String INSTRUCTION_KEY_EXIT= "quit";
-
-    /**
-     * Pattern to show before an command invite
-     * in order to show the user he can input a command
-     */
-    private final String INSTRUCTION_INVITE= "> ";
+    private final Properties properties;
 
     /**
      * A scanner to read from the user input, typically the standard input
@@ -84,9 +56,10 @@ public class ConsoleInterface implements UserInterface{
      * @param in the input stream from where to read input, typically System.in
      * @param out the output stream to where write output, typically System.out
      */
-    public ConsoleInterface(InputStream in, OutputStream out){
+    public ConsoleInterface(InputStream in, OutputStream out, Properties properties){
         this.userInputScanner = new Scanner(in);
         this.userDisplayStream = out;
+        this.properties = properties;
         sayHello();
     }
 
@@ -99,7 +72,7 @@ public class ConsoleInterface implements UserInterface{
         Instruction userInstruction;
         do {
             try {
-                userDisplayStream.write(INSTRUCTION_INVITE.getBytes());
+                userDisplayStream.write(properties.getProperty(property_display_instruction).getBytes());
                 userDisplayStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -184,11 +157,11 @@ public class ConsoleInterface implements UserInterface{
      */
     protected Instruction parseInstruction(String userEntry){
         if (userEntry == null || userEntry.isEmpty()){
-            writeInformation(UNKNOWN_COMMAND_WARNING);
+            writeInformation(properties.getProperty(property_message_unknown_command));
         }
-        String[] instructionParts = userEntry.split(" ");
+        String[] instructionParts = userEntry.split(properties.getProperty(property_instruction_split));
         if (instructionParts.length == 1) {
-            if (instructionParts[0].equals(INSTRUCTION_KEY_EXIT)){
+            if (instructionParts[0].equals(properties.getProperty(property_instruction_quit))){
                 return new Instruction(Action.EXIT, null, null);
             }
             if (instructionParts[0].length() == 0){
@@ -196,33 +169,32 @@ public class ConsoleInterface implements UserInterface{
             }
             return new Instruction(Action.SHOW_TIMELINE, instructionParts[0], null);
         }
-        if (instructionParts.length == 2 && instructionParts[1].equals(INSTRUCTION_KEY_WALL)) {
+        if (instructionParts.length == 2 && instructionParts[1].equals(properties.getProperty(property_instruction_wall))) {
             return new Instruction(Action.SHOW_WALL, instructionParts[0], null);
         }
-        if (instructionParts.length > 2 && instructionParts[1].equals(INSTRUCTION_KEY_POST)){
+        if (instructionParts.length > 2 && instructionParts[1].equals(properties.getProperty(property_instruction_post))){
             return new Instruction(Action.POST, instructionParts[0], userEntry.replaceFirst(instructionParts[0]+" "+instructionParts[1]+" ",""));
         }
-        if (instructionParts.length > 2 && instructionParts[1].equals(INSTRUCTION_KEY_FOLLOW)){
+        if (instructionParts.length > 2 && instructionParts[1].equals(properties.getProperty(property_instruction_follow))){
             return new Instruction(Action.FOLLOW, instructionParts[0], instructionParts[2]);
         }
-        writeInformation(UNKNOWN_COMMAND_WARNING);
+        writeInformation(properties.getProperty(property_message_unknown_command));
         return null;
     }
 
     /**
      * Display to the interface the welcome message
-     * @see ConsoleInterface#WELCOME_MESSAGE
      */
     private void sayHello() {
-        writeInformation(WELCOME_MESSAGE);
+        writeInformation(properties.getProperty(property_message_logo));
+        writeInformation(properties.getProperty(property_message_welcome));
     }
 
     /**
      * Display to the interface the goodbye message
-     * @see ConsoleInterface#GOODBYE_MESSAGE
      */
     private void sayBye() {
-        writeInformation(GOODBYE_MESSAGE);
+        writeInformation(properties.getProperty(property_message_goodbye));
     }
 
     /**

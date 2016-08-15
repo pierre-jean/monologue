@@ -7,8 +7,11 @@ import fr.baraud.codurance.monologue.ui.Action;
 import fr.baraud.codurance.monologue.ui.Instruction;
 import fr.baraud.codurance.monologue.ui.UserInterface;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Properties;
 
 /**
  * Monologue is a social networking application.
@@ -16,6 +19,8 @@ import java.util.HashMap;
  * and call #listenInstructions()
  */
 public class Monologue {
+
+    private final static String CONSOLE_PROPERTIES = "console-interface.properties";
 
 	private final UserInterface userInterface;
     private SocialStack socialStack;
@@ -61,7 +66,14 @@ public class Monologue {
      * @param args not used for the moment
      */
 	public static void main(String[] args) {
-	    Monologue monologue = new Monologue(new ConsoleInterface(System.in, System.out), new MemorySocialStack(new HashMap<>()));
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        Properties props = new Properties();
+        try(InputStream resourceStream = loader.getResourceAsStream(CONSOLE_PROPERTIES)) {
+            props.load(resourceStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Monologue monologue = new Monologue(new ConsoleInterface(System.in, System.out, props), new MemorySocialStack(new HashMap<>()));
         monologue.listenInstructions();
     }
 
