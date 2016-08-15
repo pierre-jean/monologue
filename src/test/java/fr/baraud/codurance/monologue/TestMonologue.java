@@ -7,7 +7,6 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
-import java.util.Properties;
 
 /**
  * Created by animus on 13/08/16.
@@ -19,8 +18,17 @@ public class TestMonologue {
         String alicePostInstruction = "Alice -> Are you joining me for breakfast?";
         String sendInstruction = "%n";
         String exitInstruction = "quit";
-        ByteArrayInputStream simulatedAliceEntry = new ByteArrayInputStream(String.format((alicePostInstruction+sendInstruction+exitInstruction)).getBytes());
-        ConsoleInterface consoleInterface = new ConsoleInterface(simulatedAliceEntry, new ByteArrayOutputStream(), new Properties());
-        new Monologue(Monologue.loadProperties(Monologue.MONOLOGUE_PROPERTIES));
+        ByteArrayInputStream simulatedAliceEntry = new ByteArrayInputStream(String.format(
+                (alicePostInstruction+
+                        sendInstruction+
+                        exitInstruction+
+                        sendInstruction)).getBytes());
+        ConsoleInterface consoleInterface = new ConsoleInterface(
+                simulatedAliceEntry, 
+                new ByteArrayOutputStream(),
+                Monologue.loadProperties(Monologue.CONSOLE_PROPERTIES));
+        Monologue monologue = new Monologue(Monologue.loadProperties(Monologue.MONOLOGUE_PROPERTIES));
+        monologue.listenInstructions(consoleInterface, new MemorySocialStack(new HashMap<>()));  
     }
+    
 }
