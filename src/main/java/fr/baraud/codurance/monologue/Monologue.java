@@ -36,7 +36,7 @@ public class Monologue {
      */
     public void listenInstructions(UserInterface userInterface, SocialStack socialStack){
         Instruction instruction = userInterface.getNextInstruction();
-        while (Action.EXIT != instruction.getAction()){
+        do {
             switch (instruction.getAction()){
             case POST:
                 socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
@@ -69,9 +69,9 @@ public class Monologue {
                 userInterface.writeHelp();
             case EXIT:
                 break;
-            }
+            } 
             instruction = userInterface.getNextInstruction();
-        }
+        } while (Action.EXIT != instruction.getAction());
         userInterface.close();
     }
 
@@ -81,16 +81,20 @@ public class Monologue {
      */
     public static void main(String[] args) {
         Monologue monologue = new Monologue();
-        monologue.listenInstructions(new ConsoleInterface(System.in, System.out,Monologue.loadProperties(CONSOLE_PROPERTIES)), new MemorySocialStack(new HashMap<>()));
+        Properties consoleProps = new Properties();
+        try {
+            consoleProps = Monologue.loadProperties(CONSOLE_PROPERTIES);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        monologue.listenInstructions(new ConsoleInterface(System.in, System.out, consoleProps), new MemorySocialStack(new HashMap<>()));
     }
 
-    public static Properties loadProperties(String filename){
+    public static Properties loadProperties(String filename) throws IOException{
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties props = new Properties();
         try(InputStream resourceStream = loader.getResourceAsStream(filename)) {
             props.load(resourceStream);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return props;
     }

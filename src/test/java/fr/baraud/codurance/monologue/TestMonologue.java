@@ -2,10 +2,12 @@ package fr.baraud.codurance.monologue;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.Test;
 
@@ -19,6 +21,8 @@ import fr.baraud.codurance.monologue.ui.UserInterface;
  * Created by animus on 13/08/16.
  */
 public class TestMonologue {
+    
+    private final String testProperty = "DummyProperties.properties";
     
     @Test
     public void TestPost(){
@@ -102,6 +106,17 @@ public class TestMonologue {
         MockSocialStack socialStack =  new MockSocialStack(null);
         monologue.listenInstructions(ui, socialStack);
         assertEquals(showTimeline.getUser(), ui.unknownUser);
+    }
+    
+    @Test
+    public void TestLoadProperties(){
+        Properties props = new Properties();
+        try {
+            props = Monologue.loadProperties(testProperty);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertEquals("world", props.getProperty("hello"));
     }
     
     private class MockSocialStack implements SocialStack {
