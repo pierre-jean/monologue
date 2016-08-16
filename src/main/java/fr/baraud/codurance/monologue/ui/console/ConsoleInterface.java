@@ -32,6 +32,30 @@ public class ConsoleInterface implements UserInterface{
     final static String property_message_unknown_command= "ui.console.message.unknown.command";
     // property key to the warning message when a user is not found
     final static String property_message_unknown_user = "ui.console.message.unknown.user";
+    // property key to the unit base second in singular
+    final static String property_message_second_ago = "ui.console.message.second.ago";
+    // property key to the unit base second in plural
+    final static String property_message_seconds_ago = "ui.console.message.seconds.ago";
+    // property key to the unit base second in singular
+    final static String property_message_minute_ago = "ui.console.message.minute.ago";
+    // property key to the unit base second in plural
+    final static String property_message_minutes_ago = "ui.console.message.minutes.ago";
+    // property key to the unit base second in singular
+    final static String property_message_hour_ago = "ui.console.message.hour.ago";
+    // property key to the unit base second in plural
+    final static String property_message_hours_ago = "ui.console.message.hours.ago";
+    // property key to the unit base second in singular
+    final static String property_message_day_ago = "ui.console.message.day.ago";
+    // property key to the unit base second in plural
+    final static String property_message_days_ago = "ui.console.message.days.ago";
+    // property key to the unit base second in singular
+    final static String property_message_month_ago = "ui.console.message.month.ago";
+    // property key to the unit base second in plural
+    final static String property_message_months_ago = "ui.console.message.months.ago";
+    // property key to the unit base year in singular
+    final static String property_message_year_ago = "ui.console.message.year.ago";
+    // property key to the unit base year in plural
+    final static String property_message_years_ago = "ui.console.message.years.ago";
     // property key to the pattern used to recognised the post instruction
     final static String property_instruction_post= "ui.console.instructions.post";
     // property key to the pattern used to recognised the wall instruction
@@ -48,32 +72,6 @@ public class ConsoleInterface implements UserInterface{
     final static String property_display_instruction = "ui.console.display.instruction";
     // property key to the space separator
     final static String property_display_space = "ui.console.display.space";
-    // property key to the unit base second in singular
-    final static String property_word_second = "ui.console.word.second";
-    // property key to the unit base second in plural
-    final static String property_word_seconds = "ui.console.word.seconds";
-    // property key to the unit base second in singular
-    final static String property_word_minute = "ui.console.word.minute";
-    // property key to the unit base second in plural
-    final static String property_word_minutes = "ui.console.word.minutes";
-    // property key to the unit base second in singular
-    final static String property_word_hour = "ui.console.word.hour";
-    // property key to the unit base second in plural
-    final static String property_word_hours = "ui.console.word.hours";
-    // property key to the unit base second in singular
-    final static String property_word_day = "ui.console.word.day";
-    // property key to the unit base second in plural
-    final static String property_word_days = "ui.console.word.days";
-    // property key to the unit base second in singular
-    final static String property_word_month = "ui.console.word.month";
-    // property key to the unit base second in plural
-    final static String property_word_months = "ui.console.word.months";
-    // property key to the unit base year in singular
-    final static String property_word_year = "ui.console.word.year";
-    // property key to the unit base year in plural
-    final static String property_word_years = "ui.console.word.years";
-    // property key to word ago
-    final static String property_word_ago = "ui.console.word.ago";
 
     /**
      * The properties that contains messages and display custom patters
@@ -185,16 +183,17 @@ public class ConsoleInterface implements UserInterface{
      * second, it will return "2 seconds ago"
      * @param delay the time in ms to express as delay
      * @param unit in ms to divide the delay in the base we desire
-     * @param unitSingular the name of the unit (singular) we want to use, like second
-     * @param unitPlural the name of the unit (plural) we want to use, like seconds
-     * @return a sentence in the form "X 'unitname' ago" if X is equal or less 
-     * than 1, or "X 'unitnames' ago' if X is superior to 1.
+     * @param delayExpressionSingular the sentence to express the delay for 0 or
+     * 1 unit. Ex: %1d second ago 
+     * @param delayExpressionPlural the sentence to express the delay for more
+     * than 1 unit. Ex: %1d seconds ago 
+     * @return the formatted delayExpression, the plural versio or the singular 
+     * version depending if the division delay/unit is superior to one or not.
      */
-    String printInUnit(long delay, long unit, String unitSingular, String unitPlural){
+    String printInUnit(long delay, long unit, String delayExpressionSingular, String delayExpressionPlural){
         long result = delay/unit;
-        String space = getText(property_display_space);
-        return result > 1 ? result + space + unitPlural+ space + getText(property_word_ago) :
-            result + space + unitSingular + space + getText(property_word_ago);
+        return result > 1 ? String.format(delayExpressionPlural, result) :
+            String.format(delayExpressionSingular, result);
     }
 
     /**
@@ -219,21 +218,21 @@ public class ConsoleInterface implements UserInterface{
         }
         long delay = now.getTime() - firstDate.getTime();
         if (delay < ONE_MIN_IN_MS){
-            return printInUnit(delay, ONE_SECOND_IN_MS, getText(property_word_second), getText(property_word_seconds));
+            return printInUnit(delay, ONE_SECOND_IN_MS, getText(property_message_second_ago), getText(property_message_seconds_ago));
         }
         if (delay < ONE_HOUR_IN_MS){
-            return printInUnit(delay, ONE_MIN_IN_MS, getText(property_word_minute), getText(property_word_minutes));
+            return printInUnit(delay, ONE_MIN_IN_MS, getText(property_message_minute_ago), getText(property_message_minutes_ago));
         }
         if (delay < ONE_DAY_IN_MS) {
-            return printInUnit(delay, ONE_HOUR_IN_MS, getText(property_word_hour), getText(property_word_hours));
+            return printInUnit(delay, ONE_HOUR_IN_MS, getText(property_message_hour_ago), getText(property_message_hours_ago));
         }
         if (delay < ONE_MONTH_IN_MS) {
-            return printInUnit(delay, ONE_DAY_IN_MS, getText(property_word_day), getText(property_word_days));
+            return printInUnit(delay, ONE_DAY_IN_MS, getText(property_message_day_ago), getText(property_message_days_ago));
         }
         if (delay < ONE_YEAR_IN_MS) {
-            return printInUnit(delay, ONE_MONTH_IN_MS, getText(property_word_month), getText(property_word_months));
+            return printInUnit(delay, ONE_MONTH_IN_MS, getText(property_message_month_ago), getText(property_message_months_ago));
         }
-        return printInUnit(delay, ONE_YEAR_IN_MS, getText(property_word_year), getText(property_word_years));
+        return printInUnit(delay, ONE_YEAR_IN_MS, getText(property_message_year_ago), getText(property_message_years_ago));
     }
 
     /**
