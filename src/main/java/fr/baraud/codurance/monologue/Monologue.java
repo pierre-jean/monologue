@@ -36,39 +36,39 @@ public class Monologue {
         do {
             instruction = userInterface.getNextInstruction();
             switch (instruction.getAction()){
-            case POST:
-                socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
-                break;
-            case SHOW_TIMELINE:
-                Timeline timeline = socialStack.getTimeline(instruction.getUser());
-                if (timeline == null){
-                    userInterface.writeWarningUnknownUser(instruction.getUser());
-                } else {
-                    userInterface.writeTimeline(timeline, new Date());
-                }
-                break;
-            case SHOW_WALL:
-                Timeline wall = socialStack.getWall(instruction.getUser());
-                if (wall == null){
-                    userInterface.writeWarningUnknownUser(instruction.getUser());
-                } else {
-                    userInterface.writeWall(wall, new Date());                		
-                }
-                break;
-            case FOLLOW:
-                if (!socialStack.userExist(instruction.getUser())){
-                    userInterface.writeWarningUnknownUser(instruction.getUser());
-                } else if (!socialStack.userExist(instruction.getContent())){
-                    userInterface.writeWarningUnknownUser(instruction.getContent());
-                } else{
-                    socialStack = socialStack.follow(instruction.getUser(), instruction.getContent());
-                }
-                break;
-            case HELP:
-                userInterface.writeHelp();
-            case EXIT:
-                break;
-            } 
+                case POST:
+                    socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
+                    break;
+                case SHOW_TIMELINE:
+                    Timeline timeline = socialStack.getTimeline(instruction.getUser());
+                    if (timeline == null){
+                        userInterface.writeWarningUnknownUser(instruction.getUser());
+                    } else {
+                        userInterface.writeTimeline(timeline, new Date());
+                    }
+                    break;
+                case SHOW_WALL:
+                    Timeline wall = socialStack.getWall(instruction.getUser());
+                    if (wall == null){
+                        userInterface.writeWarningUnknownUser(instruction.getUser());
+                    } else {
+                        userInterface.writeWall(wall, new Date());
+                    }
+                    break;
+                case FOLLOW:
+                    if (!socialStack.userExist(instruction.getUser())){
+                        userInterface.writeWarningUnknownUser(instruction.getUser());
+                    } else if (!socialStack.userExist(instruction.getContent())){
+                        userInterface.writeWarningUnknownUser(instruction.getContent());
+                    } else{
+                        socialStack = socialStack.follow(instruction.getUser(), instruction.getContent());
+                    }
+                    break;
+                case HELP:
+                    userInterface.writeHelp();
+                case EXIT:
+                    break;
+            }
         } while (Action.EXIT != instruction.getAction());
         userInterface.close();
     }

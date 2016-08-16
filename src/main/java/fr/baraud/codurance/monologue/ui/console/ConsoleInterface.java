@@ -136,11 +136,11 @@ public class ConsoleInterface implements UserInterface{
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Write an information to the output, formated as an information
      * (for instance a line return at the end)
-     * 
+     *
      * @param information the message to display
      * @see #property_message_info
      */
@@ -156,7 +156,7 @@ public class ConsoleInterface implements UserInterface{
     public void writeHelp(){
         writeInformation(getText(property_message_help));
     }
-    
+
     /**
      * Display a warning message regarding a user not found
      * @param user the user that is missing
@@ -164,7 +164,7 @@ public class ConsoleInterface implements UserInterface{
     @Override
     public void writeWarningUnknownUser(String user) {
         writeInformation(String.format(getText(property_message_unknown_user),
-                user));
+            user));
     }
 
     /**
@@ -175,9 +175,9 @@ public class ConsoleInterface implements UserInterface{
     public void writeTimeline(Timeline timeline, Date currentTime) {
         if (timeline != null){
             writeInformation(String.format(
-                    properties.getProperty(property_message_timeline), 
-                    timeline.getMessage(), 
-                    printDelay(timeline.getMessageTimestamp(), currentTime)));
+                properties.getProperty(property_message_timeline),
+                timeline.getMessage(),
+                printDelay(timeline.getMessageTimestamp(), currentTime)));
             writeTimeline(timeline.getNext(), currentTime);
         }
     }
@@ -190,10 +190,10 @@ public class ConsoleInterface implements UserInterface{
     public void writeWall(Timeline wall, Date currentTime) {
         if (wall != null){
             writeInformation(String.format(
-                    properties.getProperty(property_message_wall), 
-                    wall.getUser(), 
-                    wall.getMessage(),
-                    printDelay(wall.getMessageTimestamp(), currentTime)));
+                properties.getProperty(property_message_wall),
+                wall.getUser(),
+                wall.getMessage(),
+                printDelay(wall.getMessageTimestamp(), currentTime)));
             writeWall(wall.getNext(), currentTime);
         }
 
@@ -212,8 +212,8 @@ public class ConsoleInterface implements UserInterface{
      * @return the formatted delayExpression, the plural versio or the singular 
      * version depending if the division delay/unit is superior to one or not.
      */
-    String printInUnit(long delay, long unit, String delayExpressionSingular, 
-            String delayExpressionPlural){
+    String printInUnit(long delay, long unit, String delayExpressionSingular,
+                       String delayExpressionPlural){
         long result = delay/unit;
         return result > 1 ? String.format(delayExpressionPlural, result) :
             String.format(delayExpressionSingular, result);
@@ -238,37 +238,37 @@ public class ConsoleInterface implements UserInterface{
 
         if (firstDate.compareTo(now) > 0){
             throw new IllegalArgumentException("the date parameter should be "
-                    + "previous to the second one");
+                + "previous to the second one");
         }
         long delay = now.getTime() - firstDate.getTime();
         if (delay < ONE_MIN_IN_MS){
-            return printInUnit(delay, ONE_SECOND_IN_MS, 
-                    getText(property_message_second_ago), 
-                    getText(property_message_seconds_ago));
+            return printInUnit(delay, ONE_SECOND_IN_MS,
+                getText(property_message_second_ago),
+                getText(property_message_seconds_ago));
         }
         if (delay < ONE_HOUR_IN_MS){
-            return printInUnit(delay, ONE_MIN_IN_MS, 
-                    getText(property_message_minute_ago), 
-                    getText(property_message_minutes_ago));
+            return printInUnit(delay, ONE_MIN_IN_MS,
+                getText(property_message_minute_ago),
+                getText(property_message_minutes_ago));
         }
         if (delay < ONE_DAY_IN_MS) {
-            return printInUnit(delay, ONE_HOUR_IN_MS, 
-                    getText(property_message_hour_ago), 
-                    getText(property_message_hours_ago));
+            return printInUnit(delay, ONE_HOUR_IN_MS,
+                getText(property_message_hour_ago),
+                getText(property_message_hours_ago));
         }
         if (delay < ONE_MONTH_IN_MS) {
-            return printInUnit(delay, ONE_DAY_IN_MS, 
-                    getText(property_message_day_ago), 
-                    getText(property_message_days_ago));
+            return printInUnit(delay, ONE_DAY_IN_MS,
+                getText(property_message_day_ago),
+                getText(property_message_days_ago));
         }
         if (delay < ONE_YEAR_IN_MS) {
-            return printInUnit(delay, ONE_MONTH_IN_MS, 
-                    getText(property_message_month_ago), 
-                    getText(property_message_months_ago));
+            return printInUnit(delay, ONE_MONTH_IN_MS,
+                getText(property_message_month_ago),
+                getText(property_message_months_ago));
         }
-        return printInUnit(delay, ONE_YEAR_IN_MS, 
-                getText(property_message_year_ago), 
-                getText(property_message_years_ago));
+        return printInUnit(delay, ONE_YEAR_IN_MS,
+            getText(property_message_year_ago),
+            getText(property_message_years_ago));
     }
 
     /**
@@ -289,55 +289,55 @@ public class ConsoleInterface implements UserInterface{
         final String postInstruction = getText(property_instruction_post);
         final String helpInstruction = getText(property_instruction_help);
         final String wallInstruction = getText(property_instruction_wall);
-        
+
         String[] instructionParts = userEntry.split(
-                getText(property_instruction_split));
+            getText(property_instruction_split));
         switch (instructionParts.length){
-        
-        case EMPTY_INSTRUCTION:
-            return null;
-            
-        case ONE_WORD_INSTRUTION:
-            String firstElement = instructionParts[0];
-            if (firstElement.isEmpty()){
+
+            case EMPTY_INSTRUCTION:
+                return null;
+
+            case ONE_WORD_INSTRUTION:
+                String firstElement = instructionParts[0];
+                if (firstElement.isEmpty()){
+                    writeInformation(getText(property_message_unknown_command));
+                    return null;
+                }
+                if (firstElement.equals(quitInstruction)){
+                    return new Instruction(Action.EXIT, null, null);
+                }
+                if (firstElement.equals(helpInstruction)){
+                    return new Instruction(Action.HELP, null, null);
+                }
+                return new Instruction(Action.SHOW_TIMELINE, instructionParts[0], null);
+
+            case TWO_WORD_INSTRUCTION:
+                if (instructionParts[1].equals(wallInstruction)){
+                    return new Instruction(Action.SHOW_WALL, instructionParts[0], null);
+                }
                 writeInformation(getText(property_message_unknown_command));
                 return null;
-            }
-            if (firstElement.equals(quitInstruction)){
-                return new Instruction(Action.EXIT, null, null);
-            }
-            if (firstElement.equals(helpInstruction)){
-                return new Instruction(Action.HELP, null, null);
-            }
-            return new Instruction(Action.SHOW_TIMELINE, instructionParts[0], null);
-            
-        case TWO_WORD_INSTRUCTION:
-            if (instructionParts[1].equals(wallInstruction)){
-                return new Instruction(Action.SHOW_WALL, instructionParts[0], null);
-            }
-            writeInformation(getText(property_message_unknown_command));
-            return null;
-            
-         //3 or more words for instruction
-        default:
-            String secondElement = instructionParts[1];
-            if (secondElement.equals(postInstruction)){
-                String postMessage = userEntry.replaceFirst(
+
+            //3 or more words for instruction
+            default:
+                String secondElement = instructionParts[1];
+                if (secondElement.equals(postInstruction)){
+                    String postMessage = userEntry.replaceFirst(
                         instructionParts[0]+getText(property_instruction_split)
-                        +instructionParts[1]+getText(property_instruction_split),
+                            +instructionParts[1]+getText(property_instruction_split),
                         "");
-                return new Instruction(Action.POST, 
-                        instructionParts[0], 
+                    return new Instruction(Action.POST,
+                        instructionParts[0],
                         postMessage);
-            }
-            if (secondElement.equals(followInstruction)){
-                return new Instruction(Action.FOLLOW, 
-                        instructionParts[0], 
+                }
+                if (secondElement.equals(followInstruction)){
+                    return new Instruction(Action.FOLLOW,
+                        instructionParts[0],
                         instructionParts[2]);
-            }
-            writeInformation(getText(property_message_unknown_command));
-            return null;
-            
+                }
+                writeInformation(getText(property_message_unknown_command));
+                return null;
+
         }
     }
 

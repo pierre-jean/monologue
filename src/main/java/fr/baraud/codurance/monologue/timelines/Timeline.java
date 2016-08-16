@@ -61,9 +61,9 @@ public class Timeline implements Comparable<Timeline>{
         }
         Timeline timeline = (Timeline) o;
         return (Objects.equals(message, timeline.getMessage())
-                && Objects.equals(user, timeline.getUser())
-                && Objects.equals(messageTimestamp, timeline.getMessageTimestamp())
-                && Objects.equals(next, timeline.getNext()));
+            && Objects.equals(user, timeline.getUser())
+            && Objects.equals(messageTimestamp, timeline.getMessageTimestamp())
+            && Objects.equals(next, timeline.getNext()));
     }
 
     @Override

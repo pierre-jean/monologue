@@ -40,7 +40,7 @@ public interface UserInterface {
      * Print help for user
      */
     void writeHelp();
-    
+
     /**
      * Print warning message when user does not exist
      */

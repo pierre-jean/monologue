@@ -54,7 +54,7 @@ public class User {
         }
         User user = (User)o;
         return name.equals(user.getName())
-                && following.equals(user.getFollowing())
-                && timeline.equals(user.getTimeline());
+            && following.equals(user.getFollowing())
+            && timeline.equals(user.getTimeline());
     }
 }

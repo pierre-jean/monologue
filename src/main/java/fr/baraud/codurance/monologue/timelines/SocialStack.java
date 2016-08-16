@@ -6,7 +6,7 @@ import java.util.Date;
  * A SocialStack is a database of all the users and their timeline.
  * It is immutable so if a new post is created or a user gets a new follower,
  * a new instance is returned
- *  
+ *
  *@see Timeline
  *@see User
  */
@@ -16,7 +16,7 @@ public interface SocialStack {
      * Add a new post to the user's timeline (and create the user if it does not
      * exist). It does not affect the current instance of the SocialStack, only
      * the new instance returned.
-     * 
+     *
      * @param user the author of the message. Should not contains space.
      * @param message the content of the message
      * @param messageTimestamp the date of the message creation
@@ -50,7 +50,7 @@ public interface SocialStack {
      * @return the wall if the user exist, null otherwise
      */
     Timeline getWall(String user);
-    
+
     /**
      * Return true if the user exists (has posted a message at least once) or
      * false otherwise

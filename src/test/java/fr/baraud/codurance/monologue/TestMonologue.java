@@ -19,15 +19,15 @@ import fr.baraud.codurance.monologue.ui.Instruction;
 import fr.baraud.codurance.monologue.ui.UserInterface;
 
 public class TestMonologue {
-    
+
     private final String testProperty = "DummyProperties.properties";
-    
+
     @Test
     public void listen_receivePostInstruction_callSocialStackPostMethod(){
         //given
         Monologue monologue = new Monologue();
-        Instruction post = new Instruction(Action.POST, "Elliot", 
-                "FU society is watching");
+        Instruction post = new Instruction(Action.POST, "Elliot",
+            "FU society is watching");
         MockUI ui = new MockUI(Collections.singletonList(post));
         MockSocialStack socialStack =  new MockSocialStack(null);
         //when
@@ -36,15 +36,15 @@ public class TestMonologue {
         assertEquals(post.getUser(), socialStack.postUser);
         assertEquals(post.getContent(), socialStack.postMessage);
     }
-    
+
     @Test
     public void listen_receiveTimelineInstruction_callUIWriteTimeline(){
         //given
         Monologue monologue = new Monologue();
-        Instruction showTimeline = new Instruction(Action.SHOW_TIMELINE, 
-                "Elliot", null);
-        Timeline timeline = new Timeline("FU Society is watching", 
-                "Elliot", new Date(0), null);
+        Instruction showTimeline = new Instruction(Action.SHOW_TIMELINE,
+            "Elliot", null);
+        Timeline timeline = new Timeline("FU Society is watching",
+            "Elliot", new Date(0), null);
         MockUI ui = new MockUI(Collections.singletonList(showTimeline));
         MockSocialStack socialStack =  new MockSocialStack(timeline);
         //when
@@ -52,14 +52,14 @@ public class TestMonologue {
         //then
         assertEquals(timeline, ui.lastWrittenTimeline);
     }
-    
+
     @Test
     public void listen_receiveWallInstruction_callUIWriteWall(){
         //given
         Monologue monologue = new Monologue();
         Instruction showWall = new Instruction(Action.SHOW_WALL, "Elliot", null);
-        Timeline timeline = new Timeline("FU Society is watching", 
-                "Elliot", new Date(0), null);
+        Timeline timeline = new Timeline("FU Society is watching",
+            "Elliot", new Date(0), null);
         MockUI ui = new MockUI(Collections.singletonList(showWall));
         MockSocialStack socialStack =  new MockSocialStack(timeline);
         // when
@@ -67,7 +67,7 @@ public class TestMonologue {
         // then
         assertEquals(timeline, ui.lastWrittenWall);
     }
-    
+
     @Test
     public void listen_receiveFollowInstruction_callSocialStackFollow(){
         //given
@@ -81,7 +81,7 @@ public class TestMonologue {
         assertEquals(showWall.getUser(), socialStack.follower);
         assertEquals(showWall.getContent(), socialStack.following);
     }
-    
+
     @Test
     public void listen_receiveFollowUnknowUser_callUIWriteWarningUnknownUser(){
         //given
@@ -94,7 +94,7 @@ public class TestMonologue {
         //then
         assertEquals(showWall.getUser(), ui.unknownUser);
     }
-    
+
     @Test
     public void listen_receiveHelpInstruction_callUIWriteHelp(){
         //given
@@ -107,13 +107,13 @@ public class TestMonologue {
         //then
         assertEquals("Help", ui.lastWrittenHelp);
     }
-    
+
     @Test
     public void listen_timelineForUnknownUser_callUIWriteWarningUnknownUser(){
         //given
         Monologue monologue = new Monologue();
-        Instruction showTimeline = new Instruction(Action.SHOW_TIMELINE, 
-                "Elliot", null);
+        Instruction showTimeline = new Instruction(Action.SHOW_TIMELINE,
+            "Elliot", null);
         MockUI ui = new MockUI(Collections.singletonList(showTimeline));
         MockSocialStack socialStack =  new MockSocialStack(null);
         // when
@@ -121,13 +121,13 @@ public class TestMonologue {
         //then
         assertEquals(showTimeline.getUser(), ui.unknownUser);
     }
-    
+
     @Test
     public void listen_wallForUnknownUser_callUIWriteWarningUnknownUser(){
         //given
         Monologue monologue = new Monologue();
-        Instruction showWall = new Instruction(Action.SHOW_WALL, "Elliot", 
-                null);
+        Instruction showWall = new Instruction(Action.SHOW_WALL, "Elliot",
+            null);
         MockUI ui = new MockUI(Collections.singletonList(showWall));
         MockSocialStack socialStack =  new MockSocialStack(null);
         //when
@@ -135,7 +135,7 @@ public class TestMonologue {
         //then
         assertEquals(showWall.getUser(), ui.unknownUser);
     }
-    
+
     @Test
     public void loadProperties_keyHello_equalsWorld(){
         Properties props = new Properties();
@@ -146,18 +146,18 @@ public class TestMonologue {
         }
         assertEquals("world", props.getProperty("hello"));
     }
-    
+
     /**
      * A mock version of the stack that set its public members with the values
      * of method arguments when called
      */
     private class MockSocialStack implements SocialStack {
-        
+
         public String postUser;
         public String postMessage;
         public String follower;
         public String following;
-        
+
         Timeline timeline;
 
         public MockSocialStack(Timeline timeline) {
@@ -166,7 +166,7 @@ public class TestMonologue {
 
         @Override
         public SocialStack post(String user, String message,
-                Date messageTimestamp) {
+                                Date messageTimestamp) {
             this.postUser = user;
             this.postMessage = message;
             return this;
@@ -199,21 +199,21 @@ public class TestMonologue {
             }
             return false;
         }
-        
+
     }
-    
+
     /**
      * A mock version of the UI that set its public members with the values
      * of method arguments when called
      */
     private class MockUI implements UserInterface {
-        
+
         public Iterator<Instruction> instIterator;
         public Timeline lastWrittenTimeline;
-        public Timeline lastWrittenWall;        
+        public Timeline lastWrittenWall;
         public String unknownUser;
         public String lastWrittenHelp;
-        
+
         public MockUI(List<Instruction> instructions) {
             instIterator = instructions.iterator();
         }
@@ -240,7 +240,7 @@ public class TestMonologue {
         public void writeHelp() {
             this.lastWrittenHelp = "Help";
         }
-        
+
         @Override
         public void writeWarningUnknownUser(String user) {
             unknownUser = user;
@@ -250,9 +250,9 @@ public class TestMonologue {
         public void close() {
         }
 
-        
+
     }
-    
-    
-    
+
+
+
 }

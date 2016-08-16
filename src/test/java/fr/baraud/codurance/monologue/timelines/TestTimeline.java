@@ -16,10 +16,10 @@ public class TestTimeline {
     @Test
     public void timelinesWithSameAttributes_areEqual(){
         //given
-        Timeline timeline1 = new Timeline("this is the same as the other", "me", 
-                new Date(0), null);
-        Timeline timeline2 = new Timeline("this is the same as the other", "me", 
-                new Date(0), null);
+        Timeline timeline1 = new Timeline("this is the same as the other", "me",
+            new Date(0), null);
+        Timeline timeline2 = new Timeline("this is the same as the other", "me",
+            new Date(0), null);
         //then
         assertEquals(timeline1, timeline2);
     }
@@ -27,10 +27,10 @@ public class TestTimeline {
     @Test
     public void timelinesWithFromDifferentUsers_areNotEqual(){
         //given
-        Timeline timeline1 = new Timeline("this is the same as the other", "other", 
-                new Date(0), null);
-        Timeline timeline2 = new Timeline("this is the same as the other", "me", 
-                new Date(0), null);
+        Timeline timeline1 = new Timeline("this is the same as the other", "other",
+            new Date(0), null);
+        Timeline timeline2 = new Timeline("this is the same as the other", "me",
+            new Date(0), null);
         //then
         assertNotEquals(timeline1, timeline2);
     }
@@ -38,10 +38,10 @@ public class TestTimeline {
     @Test
     public void timelinesWithDiffentMessages_areNotEqual(){
         //given
-        Timeline timeline1 = new Timeline("this is not the same as the other", "me", 
-                new Date(0), null);
-        Timeline timeline2 = new Timeline("this is different", "me", new Date(0), 
-                null);
+        Timeline timeline1 = new Timeline("this is not the same as the other", "me",
+            new Date(0), null);
+        Timeline timeline2 = new Timeline("this is different", "me", new Date(0),
+            null);
         assertNotEquals(timeline1, timeline2);
     }
 
@@ -50,10 +50,10 @@ public class TestTimeline {
         //given
         Date firstTime = new Date(0);
         Date aMinuteLater = new Date(60000L);
-        Timeline timeline1 = new Timeline("this is the same as the other", "me", 
-                firstTime, null);
-        Timeline timeline2 = new Timeline("this is the same as the other", "me", 
-                aMinuteLater, null);
+        Timeline timeline1 = new Timeline("this is the same as the other", "me",
+            firstTime, null);
+        Timeline timeline2 = new Timeline("this is the same as the other", "me",
+            aMinuteLater, null);
         //then
         assertNotEquals(timeline1, timeline2);
     }
@@ -63,10 +63,10 @@ public class TestTimeline {
         //given
         Timeline next1 = new Timeline("hey", "friend", new Date(0), null);
         Timeline next2 = new Timeline("ho", "me", new Date(0), null);
-        Timeline timeline1 = new Timeline("this is the same as the other", "me", 
-                new Date(0), next1);
-        Timeline timeline2 = new Timeline("this is the same as the other", "me", 
-                new Date(0), next2);
+        Timeline timeline1 = new Timeline("this is the same as the other", "me",
+            new Date(0), next1);
+        Timeline timeline2 = new Timeline("this is the same as the other", "me",
+            new Date(0), next2);
         //then
         assertNotEquals(timeline1, timeline2);
     }
@@ -74,8 +74,8 @@ public class TestTimeline {
     @Test
     public void timelineEqualsItself(){
         //given
-        Timeline timeline = new Timeline("this is the same as the other", "me", 
-                new Date(0), null);
+        Timeline timeline = new Timeline("this is the same as the other", "me",
+            new Date(0), null);
         //then
         assertEquals(timeline, timeline);
     }
@@ -84,8 +84,8 @@ public class TestTimeline {
     @Test
     public void timelineDoesNotEqualsOtherThings(){
         //given
-        Timeline timeline = new Timeline("this is the same as the other", "me", 
-                new Date(0), null);
+        Timeline timeline = new Timeline("this is the same as the other", "me",
+            new Date(0), null);
         //then
         assertNotEquals(timeline, "this is the same as the other");
     }
@@ -93,8 +93,8 @@ public class TestTimeline {
     @Test
     public void timelineDoesNotEqualNullButIsNPESafe(){
         //given
-        Timeline timeline = new Timeline("this is the same as the other", "me", 
-                new Date(0), null);
+        Timeline timeline = new Timeline("this is the same as the other", "me",
+            new Date(0), null);
         //then
         assertNotEquals(timeline, null);
     }
@@ -104,10 +104,10 @@ public class TestTimeline {
         //given
         Timeline next1 = new Timeline("hey", "friend", new Date(0), null);
         Timeline next2 = new Timeline("ho", "me", new Date(0), null);
-        Timeline timeline1 = new Timeline("this is the same as the other", "me", 
-                new Date(0), next1);
-        Timeline timeline2 = new Timeline("this is the same as the other", "me", 
-                new Date(0), next2);
+        Timeline timeline1 = new Timeline("this is the same as the other", "me",
+            new Date(0), next1);
+        Timeline timeline2 = new Timeline("this is the same as the other", "me",
+            new Date(0), next2);
         //then
         assertEquals(timeline1.hashCode(), timeline2.hashCode());
     }
@@ -130,10 +130,10 @@ public class TestTimeline {
         //given
         Date before = new Date(0);
         Date fifteenSecLater = new Date(15000L);
-        Timeline timeline1 = new Timeline("this is the same as the other", "me", 
-                before, null);
-        Timeline timeline2 = new Timeline("this is the same as the other", "me", 
-                fifteenSecLater, null);
+        Timeline timeline1 = new Timeline("this is the same as the other", "me",
+            before, null);
+        Timeline timeline2 = new Timeline("this is the same as the other", "me",
+            fifteenSecLater, null);
         //then
         assertTrue(timeline1.compareTo(timeline2) < 0);
     }
@@ -141,10 +141,10 @@ public class TestTimeline {
     @Test
     public void timeline_withSameTimestamp_areClassifiedByUserName() {
         //given
-        Timeline timeline1 = new Timeline("this is the same as the other", "abc", 
-                new Date(0), null);
-        Timeline timeline2 = new Timeline("this is the same as the other", "efg", 
-                new Date(0), null);
+        Timeline timeline1 = new Timeline("this is the same as the other", "abc",
+            new Date(0), null);
+        Timeline timeline2 = new Timeline("this is the same as the other", "efg",
+            new Date(0), null);
         //then
         assertTrue(timeline1.compareTo(timeline2) < 0);
     }
@@ -165,10 +165,10 @@ public class TestTimeline {
         Date now = new Date(0);
         Timeline next1 = new Timeline("abc", "me", now, null);
         Timeline next2 = new Timeline("efg", "me", now, null);
-        Timeline timeline1 = new Timeline("this is the same as the other", "me", 
-                now, next1);
-        Timeline timeline2 = new Timeline("this is the same as the other", "me", 
-                now, next2);
+        Timeline timeline1 = new Timeline("this is the same as the other", "me",
+            now, next1);
+        Timeline timeline2 = new Timeline("this is the same as the other", "me",
+            now, next2);
         //then
         assertTrue(timeline1.compareTo(timeline2) < 0);
     }
@@ -177,10 +177,10 @@ public class TestTimeline {
     public void timelineWithSimilarHistoryUserDateMessage_areEqual() {
         //given
         Date now = new Date(0);
-        Timeline timeline1 = new Timeline("this is the same as the other", "me", 
-                now, null);
+        Timeline timeline1 = new Timeline("this is the same as the other", "me",
+            now, null);
         Timeline timeline2 = new Timeline("this is the same as the other", "me",
-                now, null);
+            now, null);
         //then
         assertTrue(timeline1.compareTo(timeline2) == 0);
     }
@@ -189,10 +189,10 @@ public class TestTimeline {
     public void timelineWithSameMessageButShorterHistory_isInferior() {
         //given
         Date now = new Date(0);
-        Timeline timeline1 = new Timeline("this is the same as the other", "me", 
-                now, null);
-        Timeline timeline2 = new Timeline("this is the same as the other", "me", 
-                now, timeline1);
+        Timeline timeline1 = new Timeline("this is the same as the other", "me",
+            now, null);
+        Timeline timeline2 = new Timeline("this is the same as the other", "me",
+            now, timeline1);
         //then
         assertTrue(timeline1.compareTo(timeline2) < 0);
     }
@@ -201,10 +201,10 @@ public class TestTimeline {
     public void timelineWithSameMessageButLongerHistory_isBigger() {
         //given
         Date now = new Date();
-        Timeline timeline2 = new Timeline("this is the same as the other", "me", 
-                now, null);
-        Timeline timeline1 = new Timeline("this is the same as the other", "me", 
-                now, timeline2);
+        Timeline timeline2 = new Timeline("this is the same as the other", "me",
+            now, null);
+        Timeline timeline1 = new Timeline("this is the same as the other", "me",
+            now, timeline2);
         //then
         assertTrue(timeline1.compareTo(timeline2) > 0);
     }
