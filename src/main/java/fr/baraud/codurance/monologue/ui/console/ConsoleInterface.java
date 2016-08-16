@@ -34,6 +34,8 @@ public class ConsoleInterface implements UserInterface{
     final static String property_message_unknown_user = "ui.console.message.unknown.user";
     // property key to format a message to the user (ex: adding a line return)
     final static String property_message_info = "ui.console.message.information.format";
+    // property key to format a timeline (should take 2 arguments, the the message and the delay)
+    final static String property_message_timeline = "ui.console.message.timeline.format";
     // property key to the unit base second in singular
     final static String property_message_second_ago = "ui.console.message.second.ago";
     // property key to the unit base second in plural
@@ -170,7 +172,7 @@ public class ConsoleInterface implements UserInterface{
     @Override
     public void writeTimeline(Timeline timeline, Date currentTime) {
         if (timeline != null){
-            writeInformation(timeline.getMessage()+ " ("+printDelay(timeline.getMessageTimestamp(), currentTime)+")");
+            writeInformation(String.format(properties.getProperty(property_message_timeline), timeline.getMessage(), printDelay(timeline.getMessageTimestamp(), currentTime)));
             writeTimeline(timeline.getNext(), currentTime);
         }
     }
