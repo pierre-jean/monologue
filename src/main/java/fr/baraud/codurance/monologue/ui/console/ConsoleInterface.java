@@ -34,8 +34,10 @@ public class ConsoleInterface implements UserInterface{
     final static String property_message_unknown_user = "ui.console.message.unknown.user";
     // property key to format a message to the user (ex: adding a line return)
     final static String property_message_info = "ui.console.message.information.format";
-    // property key to format a timeline (should take 2 arguments, the the message and the delay)
+    // property key to format a timeline (should take 2 arguments, the message and the delay)
     final static String property_message_timeline = "ui.console.message.timeline.format";
+ // property key to format a wall (should take 3 arguments, the user, the message and the delay)
+    final static String property_message_wall = "ui.console.message.wall.format";
     // property key to the unit base second in singular
     final static String property_message_second_ago = "ui.console.message.second.ago";
     // property key to the unit base second in plural
@@ -172,7 +174,10 @@ public class ConsoleInterface implements UserInterface{
     @Override
     public void writeTimeline(Timeline timeline, Date currentTime) {
         if (timeline != null){
-            writeInformation(String.format(properties.getProperty(property_message_timeline), timeline.getMessage(), printDelay(timeline.getMessageTimestamp(), currentTime)));
+            writeInformation(String.format(
+                    properties.getProperty(property_message_timeline), 
+                    timeline.getMessage(), 
+                    printDelay(timeline.getMessageTimestamp(), currentTime)));
             writeTimeline(timeline.getNext(), currentTime);
         }
     }
@@ -184,7 +189,11 @@ public class ConsoleInterface implements UserInterface{
     @Override
     public void writeWall(Timeline wall, Date currentTime) {
         if (wall != null){
-            writeInformation(wall.getUser()+" - "+wall.getMessage()+ " ("+printDelay(wall.getMessageTimestamp(), currentTime)+")");
+            writeInformation(String.format(
+                    properties.getProperty(property_message_wall), 
+                    wall.getUser(), 
+                    wall.getMessage(),
+                    printDelay(wall.getMessageTimestamp(), currentTime)));
             writeWall(wall.getNext(), currentTime);
         }
 
