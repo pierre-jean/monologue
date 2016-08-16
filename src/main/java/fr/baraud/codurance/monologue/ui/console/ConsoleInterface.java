@@ -281,35 +281,64 @@ public class ConsoleInterface implements UserInterface{
      * the pattern could not be mapped to any known Instruction
      */
     private Instruction parseInstruction(String userEntry){
-        // Typing enter should just provide a new line, not raise an "unknown
-        // command" warning
-        if (userEntry.isEmpty()){
-           return null;
-        }
-        String instructionSplitChar = getText(property_instruction_split);
-        String[] instructionParts = userEntry.split(instructionSplitChar);
-        if (instructionParts.length == 1) {
-            if (instructionParts[0].equals(getText(property_instruction_quit))){
+        final int EMPTY_INSTRUCTION = 0;
+        final int ONE_WORD_INSTRUTION = 1;
+        final int TWO_WORD_INSTRUCTION = 2;
+        final String quitInstruction = getText(property_instruction_quit);
+        final String followInstruction = getText(property_instruction_follow);
+        final String postInstruction = getText(property_instruction_post);
+        final String helpInstruction = getText(property_instruction_help);
+        final String wallInstruction = getText(property_instruction_wall);
+        
+        String[] instructionParts = userEntry.split(
+                getText(property_instruction_split));
+        switch (instructionParts.length){
+        
+        case EMPTY_INSTRUCTION:
+            return null;
+            
+        case ONE_WORD_INSTRUTION:
+            String firstElement = instructionParts[0];
+            if (firstElement.isEmpty()){
+                writeInformation(getText(property_message_unknown_command));
+                return null;
+            }
+            if (firstElement.equals(quitInstruction)){
                 return new Instruction(Action.EXIT, null, null);
             }
-            if (instructionParts[0].equals(getText(property_instruction_help))){
+            if (firstElement.equals(helpInstruction)){
                 return new Instruction(Action.HELP, null, null);
             }
             return new Instruction(Action.SHOW_TIMELINE, instructionParts[0], null);
+            
+        case TWO_WORD_INSTRUCTION:
+            if (instructionParts[1].equals(wallInstruction)){
+                return new Instruction(Action.SHOW_WALL, instructionParts[0], null);
+            }
+            writeInformation(getText(property_message_unknown_command));
+            return null;
+            
+         //3 or more words for instruction
+        default:
+            String secondElement = instructionParts[1];
+            if (secondElement.equals(postInstruction)){
+                String postMessage = userEntry.replaceFirst(
+                        instructionParts[0]+getText(property_instruction_split)
+                        +instructionParts[1]+getText(property_instruction_split),
+                        "");
+                return new Instruction(Action.POST, 
+                        instructionParts[0], 
+                        postMessage);
+            }
+            if (secondElement.equals(followInstruction)){
+                return new Instruction(Action.FOLLOW, 
+                        instructionParts[0], 
+                        instructionParts[2]);
+            }
+            writeInformation(getText(property_message_unknown_command));
+            return null;
+            
         }
-        if (instructionParts.length == 2 && instructionParts[1].equals(getText(property_instruction_wall))) {
-            return new Instruction(Action.SHOW_WALL, instructionParts[0], null);
-        }
-        if (instructionParts.length > 2 && instructionParts[1].equals(getText(property_instruction_post))){
-            return new Instruction(Action.POST, instructionParts[0],
-                userEntry.replaceFirst(instructionParts[0]+instructionSplitChar+instructionParts[1]+instructionSplitChar,
-                    ""));
-        }
-        if (instructionParts.length > 2 && instructionParts[1].equals(getText(property_instruction_follow))){
-            return new Instruction(Action.FOLLOW, instructionParts[0], instructionParts[2]);
-        }
-        writeInformation(getText(property_message_unknown_command));
-        return null;
     }
 
     /**
