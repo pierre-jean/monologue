@@ -32,6 +32,8 @@ public class ConsoleInterface implements UserInterface{
     final static String property_message_unknown_command= "ui.console.message.unknown.command";
     // property key to the warning message when a user is not found
     final static String property_message_unknown_user = "ui.console.message.unknown.user";
+    // property key to format a message to the user (ex: adding a line return)
+    final static String property_message_info = "ui.console.message.information.format";
     // property key to the unit base second in singular
     final static String property_message_second_ago = "ui.console.message.second.ago";
     // property key to the unit base second in plural
@@ -112,26 +114,35 @@ public class ConsoleInterface implements UserInterface{
     public Instruction getNextInstruction() {
         Instruction userInstruction;
         do {
-            write(getText(property_display_instruction), false);
+            write(getText(property_display_instruction));
             userInstruction = parseInstruction(userInputScanner.nextLine());
         } while (userInstruction == null);
         return userInstruction;
     }
 
     /**
-     * display the text to the user interface
+     * display text to the user interface
      * @param information the text to display to the user
      */
-    private void write(String information, boolean includeLineReturn) {
+    private void write(String text) {
         try {
-            if (includeLineReturn){
-                information = information + "%n";
-            }
-            userDisplayStream.write(String.format(information).getBytes());
+            userDisplayStream.write(String.format(text).getBytes());
             userDisplayStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Write an information to the output, formated as an information
+     * (for instance a line return at the end)
+     * 
+     * @param information the message to display
+     * @see #property_message_info
+     */
+    private void writeInformation(String information){
+        String messageFormat = properties.getProperty(property_message_info);
+        write(String.format(messageFormat, information));
     }
 
     /**
@@ -139,7 +150,7 @@ public class ConsoleInterface implements UserInterface{
      */
     @Override
     public void writeHelp(){
-        write(getText(property_message_help), true);
+        writeInformation(getText(property_message_help));
     }
     
     /**
@@ -148,7 +159,7 @@ public class ConsoleInterface implements UserInterface{
      */
     @Override
     public void writeWarningUnknownUser(String user) {
-        write(getText(property_message_unknown_user)+user, true);
+        writeInformation(getText(property_message_unknown_user)+user);
     }
 
     /**
@@ -158,7 +169,7 @@ public class ConsoleInterface implements UserInterface{
     @Override
     public void writeTimeline(Timeline timeline, Date currentTime) {
         if (timeline != null){
-            write(timeline.getMessage()+ " ("+printDelay(timeline.getMessageTimestamp(), currentTime)+")", true);
+            writeInformation(timeline.getMessage()+ " ("+printDelay(timeline.getMessageTimestamp(), currentTime)+")");
             writeTimeline(timeline.getNext(), currentTime);
         }
     }
@@ -170,8 +181,7 @@ public class ConsoleInterface implements UserInterface{
     @Override
     public void writeWall(Timeline wall, Date currentTime) {
         if (wall != null){
-            write(wall.getUser()+" - "+wall.getMessage()+ " ("+printDelay(wall.getMessageTimestamp(), currentTime)+")",
-                true);
+            writeInformation(wall.getUser()+" - "+wall.getMessage()+ " ("+printDelay(wall.getMessageTimestamp(), currentTime)+")");
             writeWall(wall.getNext(), currentTime);
         }
 
@@ -246,7 +256,7 @@ public class ConsoleInterface implements UserInterface{
      */
     private Instruction parseInstruction(String userEntry){
         if (userEntry == null || userEntry.isEmpty()){
-            write(getText(property_message_unknown_command), true);
+            writeInformation(getText(property_message_unknown_command));
         }
         String instructionSplitChar = getText(property_instruction_split);
         String[] instructionParts = userEntry.split(instructionSplitChar);
@@ -273,7 +283,7 @@ public class ConsoleInterface implements UserInterface{
         if (instructionParts.length > 2 && instructionParts[1].equals(getText(property_instruction_follow))){
             return new Instruction(Action.FOLLOW, instructionParts[0], instructionParts[2]);
         }
-        write(getText(property_message_unknown_command), true);
+        writeInformation(getText(property_message_unknown_command));
         return null;
     }
 
@@ -281,15 +291,15 @@ public class ConsoleInterface implements UserInterface{
      * Display to the interface the welcome message
      */
     private void sayHello() {
-        write(getText(property_message_logo), true);
-        write(getText(property_message_welcome), true);
+        writeInformation(getText(property_message_logo));
+        writeInformation(getText(property_message_welcome));
     }
 
     /**
      * Display to the interface the goodbye message
      */
     private void sayBye() {
-        write(getText(property_message_goodbye), true);
+        writeInformation(getText(property_message_goodbye));
     }
 
     /**
