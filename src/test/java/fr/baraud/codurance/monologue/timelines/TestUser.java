@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotEquals;
 public class TestUser {
 
     @Test
-    public void testEqualUser(){
+    public void testEqualSameUser(){
         Date now = new Date();
         User albert = new User("Albert", new ArrayList<>(), new Timeline("First message", "Albert", now, null));
         User usurper = new User("Albert", new ArrayList<>(), new Timeline("First message", "Albert", now, null));
