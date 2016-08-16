@@ -46,7 +46,7 @@ public interface SocialStack {
     /**
      * Get the user's wall. A wall is an aggregation of the personal timeline
      * of the user and the personal timeline of the users he follows
-     * @param user
+     * @param user owner of the wall
      * @return the wall if the user exist, null otherwise
      */
     Timeline getWall(String user);

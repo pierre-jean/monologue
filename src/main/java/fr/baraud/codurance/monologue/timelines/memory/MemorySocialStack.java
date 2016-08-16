@@ -66,7 +66,7 @@ public class MemorySocialStack implements SocialStack {
         if (user == null){
             return null;
         }
-        TreeSet<Timeline> allTimeline = new TreeSet<Timeline>();
+        TreeSet<Timeline> allTimeline = new TreeSet<>();
         allTimeline.add(user.getTimeline());
         for (User following : user.getFollowing()){
             allTimeline.add(following.getTimeline());
@@ -81,7 +81,7 @@ public class MemorySocialStack implements SocialStack {
         User user = users.get(username);
         User toFollow = users.get(following);
         if (user != null && toFollow != null) {
-            List<User> newFollowing = new ArrayList<User>();
+            List<User> newFollowing = new ArrayList<>();
             newFollowing.addAll(user.getFollowing());
             newFollowing.add(toFollow);
             Map<String, User> newUsers = new HashMap<>();
@@ -102,7 +102,7 @@ public class MemorySocialStack implements SocialStack {
             return null;
         }
         Timeline last = followingAndPersonal.last();
-        TreeSet<Timeline> remainingFollowingAndPersonal =  new TreeSet<Timeline>();
+        TreeSet<Timeline> remainingFollowingAndPersonal =  new TreeSet<>();
         for (Timeline timeline : followingAndPersonal) {
             if (timeline == last && timeline.getNext() != null ) {
                 remainingFollowingAndPersonal.add(timeline.getNext());

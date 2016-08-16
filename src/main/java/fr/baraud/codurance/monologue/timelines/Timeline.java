@@ -77,9 +77,6 @@ public class Timeline implements Comparable<Timeline>{
      * of the message
      */
     public int compareTo(Timeline timeline) {
-        if (timeline == null ){
-            throw new NullPointerException();
-        }
         if (!messageTimestamp.equals(timeline.getMessageTimestamp())){
             return messageTimestamp.compareTo(timeline.getMessageTimestamp());
         }

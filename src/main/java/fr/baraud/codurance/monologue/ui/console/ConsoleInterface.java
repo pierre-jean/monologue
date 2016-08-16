@@ -21,31 +21,31 @@ import java.util.Scanner;
 public class ConsoleInterface implements UserInterface{
 
     // property key to the logo (in ASCII) to display when app is launched
-    public final static String property_message_logo = "ui.console.message.logo";
+    final static String property_message_logo = "ui.console.message.logo";
     // property key to the welcome message when app is launched
-    public final static String property_message_welcome = "ui.console.message.welcome";
+    final static String property_message_welcome = "ui.console.message.welcome";
     // property key to the message displayed when app is closed
-    public final static String property_message_goodbye= "ui.console.message.goodbye";
+    final static String property_message_goodbye= "ui.console.message.goodbye";
     // property key to the help message providing guidance on command usages
-    public final static String property_message_help= "ui.console.message.help";
+    final static String property_message_help= "ui.console.message.help";
     // property key to the warning message when an instruction is not recognized
-    public final static String property_message_unknown_command= "ui.console.message.unknown.command";
+    final static String property_message_unknown_command= "ui.console.message.unknown.command";
     // property key to the warning message when a user is not found
-    public final static String property_message_unknown_user = "ui.console.message.unknown.user";
+    final static String property_message_unknown_user = "ui.console.message.unknown.user";
     // property key to the pattern used to recognised the post instruction
-    public final static String property_instruction_post= "ui.console.instructions.post";
+    final static String property_instruction_post= "ui.console.instructions.post";
     // property key to the pattern used to recognised the wall instruction
-    public final static String property_instruction_wall= "ui.console.instructions.wall";
+    final static String property_instruction_wall= "ui.console.instructions.wall";
     // property key to the pattern used to recognised the follow instruction
-    public final static String property_instruction_follow= "ui.console.instructions.follow";
+    final static String property_instruction_follow= "ui.console.instructions.follow";
     // property key to the pattern used to recognised the help instruction
-    public final static String property_instruction_help="ui.console.instructions.help";
+    final static String property_instruction_help="ui.console.instructions.help";
     // property key to the pattern used to recognised the quit instruction
-    public final static String property_instruction_quit= "ui.console.instructions.quit";
+    final static String property_instruction_quit= "ui.console.instructions.quit";
     // property key to the pattern used to split the instruction in sequences
-    public final static String property_instruction_split="ui.console.instructions.split";
+    final static String property_instruction_split="ui.console.instructions.split";
     // property key to the pattern printed before an instruction invite
-    public final static String property_display_instruction = "ui.console.display.instruction";
+    final static String property_display_instruction = "ui.console.display.instruction";
 
     /**
      * The properties that contains messages and display custom patters
@@ -160,7 +160,7 @@ public class ConsoleInterface implements UserInterface{
      * @return a sentence in the form "X 'unitname' ago" if X is equal or less 
      * than 1, or "X 'unitnames' ago' if X is superior to 1.
      */
-    protected String printInUnit(long delay, long unit, String unitName){
+    String printInUnit(long delay, long unit, String unitName){
         return delay/unit > 1 ? delay/unit +" "+unitName+"s ago" : "1 "+unitName+ " ago";
     }
 
@@ -172,7 +172,7 @@ public class ConsoleInterface implements UserInterface{
      * @return a sentence representing the time spent since the first date as 
      * if the second date is the current Date and time
      */
-    protected String printDelay(Date firstDate, Date now){
+    String printDelay(Date firstDate, Date now){
 
         final long ONE_SECOND_IN_MS = 1000l;
         final long ONE_MIN_IN_MS = 60000l;
@@ -212,7 +212,7 @@ public class ConsoleInterface implements UserInterface{
      * @return a representation of the instruction entered, or null if
      * the pattern could not be mapped to any known Instruction
      */
-    protected Instruction parseInstruction(String userEntry){
+    private Instruction parseInstruction(String userEntry){
         if (userEntry == null || userEntry.isEmpty()){
             write(properties.getProperty(property_message_unknown_command), true);
         }
