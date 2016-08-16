@@ -172,7 +172,8 @@ public class ConsoleInterface implements UserInterface{
     @Override
     public void writeWall(Timeline wall, Date currentTime) {
         if (wall != null){
-            write(wall.getUser()+" - "+wall.getMessage()+ " ("+printDelay(wall.getMessageTimestamp(), currentTime)+")", true);
+            write(wall.getUser()+" - "+wall.getMessage()+ " ("+printDelay(wall.getMessageTimestamp(), currentTime)+")",
+                true);
             writeWall(wall.getNext(), currentTime);
         }
 
@@ -248,7 +249,8 @@ public class ConsoleInterface implements UserInterface{
         if (userEntry == null || userEntry.isEmpty()){
             write(getText(property_message_unknown_command), true);
         }
-        String[] instructionParts = userEntry.split(getText(property_instruction_split));
+        String instructionSplitChar = getText(property_instruction_split);
+        String[] instructionParts = userEntry.split(instructionSplitChar);
         if (instructionParts.length == 1) {
             if (instructionParts[0].equals(getText(property_instruction_quit))){
                 return new Instruction(Action.EXIT, null, null);
@@ -265,7 +267,9 @@ public class ConsoleInterface implements UserInterface{
             return new Instruction(Action.SHOW_WALL, instructionParts[0], null);
         }
         if (instructionParts.length > 2 && instructionParts[1].equals(getText(property_instruction_post))){
-            return new Instruction(Action.POST, instructionParts[0], userEntry.replaceFirst(instructionParts[0]+" "+instructionParts[1]+" ",""));
+            return new Instruction(Action.POST, instructionParts[0],
+                userEntry.replaceFirst(instructionParts[0]+instructionSplitChar+instructionParts[1]+instructionSplitChar,
+                    ""));
         }
         if (instructionParts.length > 2 && instructionParts[1].equals(getText(property_instruction_follow))){
             return new Instruction(Action.FOLLOW, instructionParts[0], instructionParts[2]);
