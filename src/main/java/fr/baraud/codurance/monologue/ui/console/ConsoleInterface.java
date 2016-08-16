@@ -86,7 +86,7 @@ public class ConsoleInterface implements UserInterface{
     public Instruction getNextInstruction() {
         Instruction userInstruction;
         do {
-            write(properties.getProperty(property_display_instruction), false);
+            write(getText(property_display_instruction), false);
             userInstruction = parseInstruction(userInputScanner.nextLine());
         } while (userInstruction == null);
         return userInstruction;
@@ -113,7 +113,7 @@ public class ConsoleInterface implements UserInterface{
      */
     @Override
     public void writeHelp(){
-        write(properties.getProperty(property_message_help), true);
+        write(getText(property_message_help), true);
     }
     
     /**
@@ -122,7 +122,7 @@ public class ConsoleInterface implements UserInterface{
      */
     @Override
     public void writeWarningUnknownUser(String user) {
-        write(properties.getProperty(property_message_unknown_user)+user, true);
+        write(getText(property_message_unknown_user)+user, true);
     }
 
     /**
@@ -214,14 +214,14 @@ public class ConsoleInterface implements UserInterface{
      */
     private Instruction parseInstruction(String userEntry){
         if (userEntry == null || userEntry.isEmpty()){
-            write(properties.getProperty(property_message_unknown_command), true);
+            write(getText(property_message_unknown_command), true);
         }
-        String[] instructionParts = userEntry.split(properties.getProperty(property_instruction_split));
+        String[] instructionParts = userEntry.split(getText(property_instruction_split));
         if (instructionParts.length == 1) {
-            if (instructionParts[0].equals(properties.getProperty(property_instruction_quit))){
+            if (instructionParts[0].equals(getText(property_instruction_quit))){
                 return new Instruction(Action.EXIT, null, null);
             }
-            if (instructionParts[0].equals(properties.getProperty(property_instruction_help))){
+            if (instructionParts[0].equals(getText(property_instruction_help))){
                 return new Instruction(Action.HELP, null, null);
             }
             if (instructionParts[0].length() == 0){
@@ -229,16 +229,16 @@ public class ConsoleInterface implements UserInterface{
             }
             return new Instruction(Action.SHOW_TIMELINE, instructionParts[0], null);
         }
-        if (instructionParts.length == 2 && instructionParts[1].equals(properties.getProperty(property_instruction_wall))) {
+        if (instructionParts.length == 2 && instructionParts[1].equals(getText(property_instruction_wall))) {
             return new Instruction(Action.SHOW_WALL, instructionParts[0], null);
         }
-        if (instructionParts.length > 2 && instructionParts[1].equals(properties.getProperty(property_instruction_post))){
+        if (instructionParts.length > 2 && instructionParts[1].equals(getText(property_instruction_post))){
             return new Instruction(Action.POST, instructionParts[0], userEntry.replaceFirst(instructionParts[0]+" "+instructionParts[1]+" ",""));
         }
-        if (instructionParts.length > 2 && instructionParts[1].equals(properties.getProperty(property_instruction_follow))){
+        if (instructionParts.length > 2 && instructionParts[1].equals(getText(property_instruction_follow))){
             return new Instruction(Action.FOLLOW, instructionParts[0], instructionParts[2]);
         }
-        write(properties.getProperty(property_message_unknown_command), true);
+        write(getText(property_message_unknown_command), true);
         return null;
     }
 
@@ -246,15 +246,15 @@ public class ConsoleInterface implements UserInterface{
      * Display to the interface the welcome message
      */
     private void sayHello() {
-        write(properties.getProperty(property_message_logo), true);
-        write(properties.getProperty(property_message_welcome), true);
+        write(getText(property_message_logo), true);
+        write(getText(property_message_welcome), true);
     }
 
     /**
      * Display to the interface the goodbye message
      */
     private void sayBye() {
-        write(properties.getProperty(property_message_goodbye), true);
+        write(getText(property_message_goodbye), true);
     }
 
     /**
@@ -264,6 +264,17 @@ public class ConsoleInterface implements UserInterface{
     @Override
     public void close() {
         sayBye();
+    }
+
+    /**
+     * Small helper to get a property from the property file.
+     * It is slightly shorter to write and prevents null.
+     * @param property
+     * @return
+     */
+    private String getText(String property){
+        String result = properties.getProperty(property);
+        return result == null? "": result;
     }
 
 }
