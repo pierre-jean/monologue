@@ -159,7 +159,8 @@ public class ConsoleInterface implements UserInterface{
      */
     @Override
     public void writeWarningUnknownUser(String user) {
-        writeInformation(getText(property_message_unknown_user)+user);
+        writeInformation(String.format(getText(property_message_unknown_user),
+                user));
     }
 
     /**

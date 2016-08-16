@@ -199,7 +199,7 @@ public class TestConsoleInterface {
         ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         out.reset();
         consoleInterface.writeWarningUnknownUser("Elliot");
-        assertEquals(String.format(props.getProperty(ConsoleInterface.property_message_unknown_user)+"Elliot%n"),out.toString());
+        assertEquals(String.format(props.getProperty(ConsoleInterface.property_message_info), String.format(props.getProperty(ConsoleInterface.property_message_unknown_user), "Elliot")),out.toString());
     }
 
     @Test
