@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -17,99 +18,126 @@ import fr.baraud.codurance.monologue.ui.Action;
 import fr.baraud.codurance.monologue.ui.Instruction;
 import fr.baraud.codurance.monologue.ui.UserInterface;
 
-/**
- * Created by animus on 13/08/16.
- */
 public class TestMonologue {
     
     private final String testProperty = "DummyProperties.properties";
     
     @Test
-    public void TestPost(){
+    public void listen_receivePostInstruction_callSocialStackPostMethod(){
+        //given
         Monologue monologue = new Monologue();
-        Instruction post = new Instruction(Action.POST, "Elliot", "FU society is watching");
-        MockUI ui = new MockUI(Arrays.asList(new Instruction[]{post}));
+        Instruction post = new Instruction(Action.POST, "Elliot", 
+                "FU society is watching");
+        MockUI ui = new MockUI(Collections.singletonList(post));
         MockSocialStack socialStack =  new MockSocialStack(null);
+        //when
         monologue.listenInstructions(ui, socialStack);
+        //then
         assertEquals(post.getUser(), socialStack.postUser);
         assertEquals(post.getContent(), socialStack.postMessage);
     }
     
     @Test
-    public void TestTimeline(){
+    public void listen_receiveTimelineInstruction_callUIWriteTimeline(){
+        //given
         Monologue monologue = new Monologue();
-        Instruction showTimeline = new Instruction(Action.SHOW_TIMELINE, "Elliot", null);
-        Timeline timeline = new Timeline("FU Society is watching", "Elliot", new Date(0), null);
-        MockUI ui = new MockUI(Arrays.asList(new Instruction[]{showTimeline}));
+        Instruction showTimeline = new Instruction(Action.SHOW_TIMELINE, 
+                "Elliot", null);
+        Timeline timeline = new Timeline("FU Society is watching", 
+                "Elliot", new Date(0), null);
+        MockUI ui = new MockUI(Collections.singletonList(showTimeline));
         MockSocialStack socialStack =  new MockSocialStack(timeline);
+        //when
         monologue.listenInstructions(ui, socialStack);
+        //then
         assertEquals(timeline, ui.lastWrittenTimeline);
     }
     
     @Test
-    public void TestWall(){
+    public void listen_receiveWallInstruction_callUIWriteWall(){
+        //given
         Monologue monologue = new Monologue();
         Instruction showWall = new Instruction(Action.SHOW_WALL, "Elliot", null);
-        Timeline timeline = new Timeline("FU Society is watching", "Elliot", new Date(0), null);
-        MockUI ui = new MockUI(Arrays.asList(new Instruction[]{showWall}));
+        Timeline timeline = new Timeline("FU Society is watching", 
+                "Elliot", new Date(0), null);
+        MockUI ui = new MockUI(Collections.singletonList(showWall));
         MockSocialStack socialStack =  new MockSocialStack(timeline);
+        // when
         monologue.listenInstructions(ui, socialStack);
+        // then
         assertEquals(timeline, ui.lastWrittenWall);
     }
     
     @Test
-    public void TestFollow(){
+    public void listen_receiveFollowInstruction_callSocialStackFollow(){
+        //given
         Monologue monologue = new Monologue();
         Instruction showWall = new Instruction(Action.FOLLOW, "Elliot", "ECorp");
         MockUI ui = new MockUI(Arrays.asList(new Instruction[]{showWall}));
         MockSocialStack socialStack =  new MockSocialStack(null);
+        // when
         monologue.listenInstructions(ui, socialStack);
+        // then
         assertEquals(showWall.getUser(), socialStack.follower);
         assertEquals(showWall.getContent(), socialStack.following);
     }
     
     @Test
-    public void TestFollowUnkownUser(){
+    public void listen_receiveFollowUnknowUser_callUIWriteWarningUnknownUser(){
+        //given
         Monologue monologue = new Monologue();
         Instruction showWall = new Instruction(Action.FOLLOW, "Santa", "ECorp");
-        MockUI ui = new MockUI(Arrays.asList(new Instruction[]{showWall}));
+        MockUI ui = new MockUI(Collections.singletonList(showWall));
         MockSocialStack socialStack =  new MockSocialStack(null);
+        //when
         monologue.listenInstructions(ui, socialStack);
+        //then
         assertEquals(showWall.getUser(), ui.unknownUser);
     }
     
     @Test
-    public void TestHelp(){
+    public void listen_receiveHelpInstruction_callUIWriteHelp(){
+        //given
         Monologue monologue = new Monologue();
         Instruction showHelp = new Instruction(Action.HELP, null, null);
         MockUI ui = new MockUI(Arrays.asList(new Instruction[]{showHelp}));
         MockSocialStack socialStack =  new MockSocialStack(null);
+        //when
         monologue.listenInstructions(ui, socialStack);
+        //then
         assertEquals("Help", ui.lastWrittenHelp);
     }
     
     @Test
-    public void TestUnkownUserTimeline(){
+    public void listen_timelineForUnknownUser_callUIWriteWarningUnknownUser(){
+        //given
         Monologue monologue = new Monologue();
-        Instruction showTimeline = new Instruction(Action.SHOW_TIMELINE, "Elliot", null);
-        MockUI ui = new MockUI(Arrays.asList(new Instruction[]{showTimeline}));
+        Instruction showTimeline = new Instruction(Action.SHOW_TIMELINE, 
+                "Elliot", null);
+        MockUI ui = new MockUI(Collections.singletonList(showTimeline));
         MockSocialStack socialStack =  new MockSocialStack(null);
+        // when
         monologue.listenInstructions(ui, socialStack);
+        //then
         assertEquals(showTimeline.getUser(), ui.unknownUser);
     }
     
     @Test
-    public void TestUnkownUserWall(){
+    public void listen_wallForUnknownUser_callUIWriteWarningUnknownUser(){
+        //given
         Monologue monologue = new Monologue();
-        Instruction showTimeline = new Instruction(Action.SHOW_WALL, "Elliot", null);
-        MockUI ui = new MockUI(Arrays.asList(new Instruction[]{showTimeline}));
+        Instruction showWall = new Instruction(Action.SHOW_WALL, "Elliot", 
+                null);
+        MockUI ui = new MockUI(Collections.singletonList(showWall));
         MockSocialStack socialStack =  new MockSocialStack(null);
+        //when
         monologue.listenInstructions(ui, socialStack);
-        assertEquals(showTimeline.getUser(), ui.unknownUser);
+        //then
+        assertEquals(showWall.getUser(), ui.unknownUser);
     }
     
     @Test
-    public void TestLoadProperties(){
+    public void loadProperties_keyHello_equalsWorld(){
         Properties props = new Properties();
         try {
             props = Monologue.loadProperties(testProperty);
@@ -119,11 +147,14 @@ public class TestMonologue {
         assertEquals("world", props.getProperty("hello"));
     }
     
+    /**
+     * A mock version of the stack that set its public members with the values
+     * of method arguments when called
+     */
     private class MockSocialStack implements SocialStack {
         
         public String postUser;
         public String postMessage;
-        
         public String follower;
         public String following;
         
@@ -171,6 +202,10 @@ public class TestMonologue {
         
     }
     
+    /**
+     * A mock version of the UI that set its public members with the values
+     * of method arguments when called
+     */
     private class MockUI implements UserInterface {
         
         public Iterator<Instruction> instIterator;
