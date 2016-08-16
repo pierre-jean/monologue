@@ -24,12 +24,6 @@ public class Monologue {
     public final static String CONSOLE_PROPERTIES = "console-interface.properties";
 
     /**
-     * Create a new instance of the App
-     */
-    public Monologue(){
-    }
-
-    /**
      * listenInstructions will wait and loop on user instructions.
      * It will execute the instructions and block until the EXIT command is received
      * from any user.
