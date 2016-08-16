@@ -116,7 +116,7 @@ public class TestConsoleInterface {
         ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
-        assertEquals("1 second ago", consoleInterface.printInUnit(1, 1, "second"));
+        assertEquals("1 second ago", consoleInterface.printInUnit(1, 1, "second", "seconds"));
     }
 
     @Test
@@ -124,7 +124,7 @@ public class TestConsoleInterface {
         ByteArrayInputStream in =  new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
-        assertEquals("2 seconds ago", consoleInterface.printInUnit(275, 100, "second"));
+        assertEquals("2 seconds ago", consoleInterface.printInUnit(275, 100, "second", "seconds"));
     }
 
     @Test

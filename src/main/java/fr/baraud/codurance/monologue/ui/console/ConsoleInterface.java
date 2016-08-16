@@ -46,6 +46,34 @@ public class ConsoleInterface implements UserInterface{
     final static String property_instruction_split="ui.console.instructions.split";
     // property key to the pattern printed before an instruction invite
     final static String property_display_instruction = "ui.console.display.instruction";
+    // property key to the space separator
+    final static String property_display_space = "ui.console.display.space";
+    // property key to the unit base second in singular
+    final static String property_word_second = "ui.console.word.second";
+    // property key to the unit base second in plural
+    final static String property_word_seconds = "ui.console.word.seconds";
+    // property key to the unit base second in singular
+    final static String property_word_minute = "ui.console.word.minute";
+    // property key to the unit base second in plural
+    final static String property_word_minutes = "ui.console.word.minutes";
+    // property key to the unit base second in singular
+    final static String property_word_hour = "ui.console.word.hour";
+    // property key to the unit base second in plural
+    final static String property_word_hours = "ui.console.word.hours";
+    // property key to the unit base second in singular
+    final static String property_word_day = "ui.console.word.day";
+    // property key to the unit base second in plural
+    final static String property_word_days = "ui.console.word.days";
+    // property key to the unit base second in singular
+    final static String property_word_month = "ui.console.word.month";
+    // property key to the unit base second in plural
+    final static String property_word_months = "ui.console.word.months";
+    // property key to the unit base year in singular
+    final static String property_word_year = "ui.console.word.year";
+    // property key to the unit base year in plural
+    final static String property_word_years = "ui.console.word.years";
+    // property key to word ago
+    final static String property_word_ago = "ui.console.word.ago";
 
     /**
      * The properties that contains messages and display custom patters
@@ -156,12 +184,16 @@ public class ConsoleInterface implements UserInterface{
      * second, it will return "2 seconds ago"
      * @param delay the time in ms to express as delay
      * @param unit in ms to divide the delay in the base we desire
-     * @param unitName the name of the unit (singular) we want to use
+     * @param unitSingular the name of the unit (singular) we want to use, like second
+     * @param unitPlural the name of the unit (plural) we want to use, like seconds
      * @return a sentence in the form "X 'unitname' ago" if X is equal or less 
      * than 1, or "X 'unitnames' ago' if X is superior to 1.
      */
-    String printInUnit(long delay, long unit, String unitName){
-        return delay/unit > 1 ? delay/unit +" "+unitName+"s ago" : "1 "+unitName+ " ago";
+    String printInUnit(long delay, long unit, String unitSingular, String unitPlural){
+        long result = delay/unit;
+        String space = getText(property_display_space);
+        return result > 1 ? result + space + unitPlural+ space + getText(property_word_ago) :
+            result + space + unitSingular + space + getText(property_word_ago);
     }
 
     /**
@@ -174,33 +206,33 @@ public class ConsoleInterface implements UserInterface{
      */
     String printDelay(Date firstDate, Date now){
 
-        final long ONE_SECOND_IN_MS = 1000l;
-        final long ONE_MIN_IN_MS = 60000l;
-        final long ONE_HOUR_IN_MS = 3600000l;
-        final long ONE_DAY_IN_MS = 86400000l;
-        final long ONE_MONTH_IN_MS = 2592000000l;
-        final long ONE_YEAR_IN_MS = 31104000000l;
+        final long ONE_SECOND_IN_MS = 1000L;
+        final long ONE_MIN_IN_MS = 60000L;
+        final long ONE_HOUR_IN_MS = 3600000L;
+        final long ONE_DAY_IN_MS = 86400000L;
+        final long ONE_MONTH_IN_MS = 2592000000L;
+        final long ONE_YEAR_IN_MS = 31104000000L;
 
         if (firstDate.compareTo(now) > 0){
             throw new IllegalArgumentException("the date parameter should be previous to the second one");
         }
         long delay = now.getTime() - firstDate.getTime();
         if (delay < ONE_MIN_IN_MS){
-            return printInUnit(delay, ONE_SECOND_IN_MS, "second");
+            return printInUnit(delay, ONE_SECOND_IN_MS, getText(property_word_second), getText(property_word_seconds));
         }
         if (delay < ONE_HOUR_IN_MS){
-            return printInUnit(delay, ONE_MIN_IN_MS, "minute");
+            return printInUnit(delay, ONE_MIN_IN_MS, getText(property_word_minute), getText(property_word_minutes));
         }
         if (delay < ONE_DAY_IN_MS) {
-            return printInUnit(delay, ONE_HOUR_IN_MS, "hour");
+            return printInUnit(delay, ONE_HOUR_IN_MS, getText(property_word_hour), getText(property_word_hours));
         }
         if (delay < ONE_MONTH_IN_MS) {
-            return printInUnit(delay, ONE_DAY_IN_MS, "day");
+            return printInUnit(delay, ONE_DAY_IN_MS, getText(property_word_day), getText(property_word_days));
         }
         if (delay < ONE_YEAR_IN_MS) {
-            return printInUnit(delay, ONE_MONTH_IN_MS, "month");
+            return printInUnit(delay, ONE_MONTH_IN_MS, getText(property_word_month), getText(property_word_months));
         }
-        return printInUnit(delay, ONE_YEAR_IN_MS, "year");
+        return printInUnit(delay, ONE_YEAR_IN_MS, getText(property_word_year), getText(property_word_years));
     }
 
     /**
