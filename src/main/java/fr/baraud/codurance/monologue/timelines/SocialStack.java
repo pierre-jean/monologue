@@ -50,5 +50,11 @@ public interface SocialStack {
      * @return the wall if the user exist, null otherwise
      */
     Timeline getWall(String user);
+    
+    /**
+     * Return true if the user exists (has posted a message at least once) or
+     * false otherwise
+     */
+    boolean userExist(String user);
 
 }

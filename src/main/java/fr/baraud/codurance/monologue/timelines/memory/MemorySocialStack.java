@@ -113,4 +113,12 @@ public class MemorySocialStack implements SocialStack {
         }
         return new Timeline(last.getMessage(), last.getUser(), last.getMessageTimestamp(), buildWall(remainingFollowingAndPersonal));
     }
+
+    /**
+     * See {@link SocialStack#userExist(String)}
+     */
+    @Override
+    public boolean userExist(String user) {
+        return users.containsKey(user);
+    }
 }

@@ -63,11 +63,12 @@ public class Monologue {
                 }
                 break;
             case FOLLOW:
-                SocialStack after = socialStack.follow(instruction.getUser(), instruction.getContent());
-                if (after == socialStack){
+                if (!socialStack.userExist(instruction.getUser())){
                     userInterface.writeWarningUnknownUser(instruction.getUser());
+                } else if (!socialStack.userExist(instruction.getContent())){
+                    userInterface.writeWarningUnknownUser(instruction.getContent());
                 } else{
-                    socialStack = after;
+                    socialStack = socialStack.follow(instruction.getUser(), instruction.getContent());
                 }
                 break;
             case HELP:

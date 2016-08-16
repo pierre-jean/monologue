@@ -160,6 +160,14 @@ public class TestMonologue {
         public Timeline getWall(String user) {
             return timeline;
         }
+
+        @Override
+        public boolean userExist(String user) {
+            if ("Elliot".equals(user) || "ECorp".equals(user)){
+                return true;
+            }
+            return false;
+        }
         
     }
     

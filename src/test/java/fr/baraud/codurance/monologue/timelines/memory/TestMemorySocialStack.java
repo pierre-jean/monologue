@@ -3,12 +3,15 @@ package fr.baraud.codurance.monologue.timelines.memory;
 import fr.baraud.codurance.monologue.timelines.SocialStack;
 import fr.baraud.codurance.monologue.timelines.Timeline;
 import fr.baraud.codurance.monologue.timelines.User;
+
 import org.junit.Test;
 
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Created by animus on 14/08/16.
@@ -117,5 +120,27 @@ public class TestMemorySocialStack {
     public void testWallUnknownUser(){
         SocialStack socialStack = new MemorySocialStack(new HashMap<>());
         assertNull(socialStack.getWall("Santa"));
+    }
+    
+    @Test
+    public void testUserExist(){
+        Date timestamp = new Date();
+        Timeline aliceTimeline = new Timeline("I want this test to pass", "Alice", timestamp, null);
+        User alice = new User("Alice", new ArrayList<>(), aliceTimeline);
+        Map<String, User> users = new HashMap<String, User>();
+        users.put(alice.getName(), alice);
+        SocialStack socialStack = new MemorySocialStack(users);
+        assertTrue(socialStack.userExist(alice.getName()));
+    }
+    
+    @Test
+    public void testUserNotExist(){
+        Date timestamp = new Date();
+        Timeline aliceTimeline = new Timeline("I want this test to pass", "Alice", timestamp, null);
+        User alice = new User("Alice", new ArrayList<>(), aliceTimeline);
+        Map<String, User> users = new HashMap<String, User>();
+        users.put(alice.getName(), alice);
+        SocialStack socialStack = new MemorySocialStack(users);
+        assertFalse(socialStack.userExist("Santa"));
     }
 }
