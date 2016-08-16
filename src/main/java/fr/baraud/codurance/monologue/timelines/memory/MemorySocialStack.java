@@ -21,11 +21,15 @@ public class MemorySocialStack implements SocialStack {
      */
     private final Map<String, User> users;
 
+    public MemorySocialStack(){
+        this.users = new HashMap<>();
+    }
+    
     /**
      * An existing list of users, that can be the result of a previous state
      * @param users existing users, can be an empty list but should not be null
      */
-    public MemorySocialStack(Map<String, User> users){
+    MemorySocialStack(Map<String, User> users){
         this.users = users;
     }
 

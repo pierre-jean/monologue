@@ -3,7 +3,6 @@ package fr.baraud.codurance.monologue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Properties;
 
 import fr.baraud.codurance.monologue.timelines.SocialStack;
@@ -85,7 +84,7 @@ public class Monologue {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        monologue.listenInstructions(new ConsoleInterface(System.in, System.out, consoleProps), new MemorySocialStack(new HashMap<>()));
+        monologue.listenInstructions(new ConsoleInterface(System.in, System.out, consoleProps), new MemorySocialStack());
     }
 
     /**
