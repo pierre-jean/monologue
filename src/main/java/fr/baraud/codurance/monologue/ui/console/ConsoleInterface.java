@@ -269,8 +269,8 @@ public class ConsoleInterface implements UserInterface{
     /**
      * Small helper to get a property from the property file.
      * It is slightly shorter to write and prevents null.
-     * @param property
-     * @return
+     * @param property the property key of the text to find in the properties provide in the constructor
+     * @return the result of the property found with the key passed
      */
     private String getText(String property){
         String result = properties.getProperty(property);
