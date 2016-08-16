@@ -36,7 +36,7 @@ public class ConsoleInterface implements UserInterface{
     final static String property_message_info = "ui.console.message.information.format";
     // property key to format a timeline (should take 2 arguments, the message and the delay)
     final static String property_message_timeline = "ui.console.message.timeline.format";
- // property key to format a wall (should take 3 arguments, the user, the message and the delay)
+    // property key to format a wall (should take 3 arguments, the user, the message and the delay)
     final static String property_message_wall = "ui.console.message.wall.format";
     // property key to the unit base second in singular
     final static String property_message_second_ago = "ui.console.message.second.ago";
@@ -212,7 +212,8 @@ public class ConsoleInterface implements UserInterface{
      * @return the formatted delayExpression, the plural versio or the singular 
      * version depending if the division delay/unit is superior to one or not.
      */
-    String printInUnit(long delay, long unit, String delayExpressionSingular, String delayExpressionPlural){
+    String printInUnit(long delay, long unit, String delayExpressionSingular, 
+            String delayExpressionPlural){
         long result = delay/unit;
         return result > 1 ? String.format(delayExpressionPlural, result) :
             String.format(delayExpressionSingular, result);
@@ -236,25 +237,38 @@ public class ConsoleInterface implements UserInterface{
         final long ONE_YEAR_IN_MS = 31104000000L;
 
         if (firstDate.compareTo(now) > 0){
-            throw new IllegalArgumentException("the date parameter should be previous to the second one");
+            throw new IllegalArgumentException("the date parameter should be "
+                    + "previous to the second one");
         }
         long delay = now.getTime() - firstDate.getTime();
         if (delay < ONE_MIN_IN_MS){
-            return printInUnit(delay, ONE_SECOND_IN_MS, getText(property_message_second_ago), getText(property_message_seconds_ago));
+            return printInUnit(delay, ONE_SECOND_IN_MS, 
+                    getText(property_message_second_ago), 
+                    getText(property_message_seconds_ago));
         }
         if (delay < ONE_HOUR_IN_MS){
-            return printInUnit(delay, ONE_MIN_IN_MS, getText(property_message_minute_ago), getText(property_message_minutes_ago));
+            return printInUnit(delay, ONE_MIN_IN_MS, 
+                    getText(property_message_minute_ago), 
+                    getText(property_message_minutes_ago));
         }
         if (delay < ONE_DAY_IN_MS) {
-            return printInUnit(delay, ONE_HOUR_IN_MS, getText(property_message_hour_ago), getText(property_message_hours_ago));
+            return printInUnit(delay, ONE_HOUR_IN_MS, 
+                    getText(property_message_hour_ago), 
+                    getText(property_message_hours_ago));
         }
         if (delay < ONE_MONTH_IN_MS) {
-            return printInUnit(delay, ONE_DAY_IN_MS, getText(property_message_day_ago), getText(property_message_days_ago));
+            return printInUnit(delay, ONE_DAY_IN_MS, 
+                    getText(property_message_day_ago), 
+                    getText(property_message_days_ago));
         }
         if (delay < ONE_YEAR_IN_MS) {
-            return printInUnit(delay, ONE_MONTH_IN_MS, getText(property_message_month_ago), getText(property_message_months_ago));
+            return printInUnit(delay, ONE_MONTH_IN_MS, 
+                    getText(property_message_month_ago), 
+                    getText(property_message_months_ago));
         }
-        return printInUnit(delay, ONE_YEAR_IN_MS, getText(property_message_year_ago), getText(property_message_years_ago));
+        return printInUnit(delay, ONE_YEAR_IN_MS, 
+                getText(property_message_year_ago), 
+                getText(property_message_years_ago));
     }
 
     /**
@@ -267,8 +281,10 @@ public class ConsoleInterface implements UserInterface{
      * the pattern could not be mapped to any known Instruction
      */
     private Instruction parseInstruction(String userEntry){
-        if (userEntry == null || userEntry.isEmpty()){
-            writeInformation(getText(property_message_unknown_command));
+        // Typing enter should just provide a new line, not raise an "unknown
+        // command" warning
+        if (userEntry.isEmpty()){
+           return null;
         }
         String instructionSplitChar = getText(property_instruction_split);
         String[] instructionParts = userEntry.split(instructionSplitChar);
@@ -278,9 +294,6 @@ public class ConsoleInterface implements UserInterface{
             }
             if (instructionParts[0].equals(getText(property_instruction_help))){
                 return new Instruction(Action.HELP, null, null);
-            }
-            if (instructionParts[0].length() == 0){
-                return null;
             }
             return new Instruction(Action.SHOW_TIMELINE, instructionParts[0], null);
         }
@@ -326,7 +339,8 @@ public class ConsoleInterface implements UserInterface{
     /**
      * Small helper to get a property from the property file.
      * It is slightly shorter to write and prevents null.
-     * @param property the property key of the text to find in the properties provide in the constructor
+     * @param property the property key of the text to find in the properties 
+     * provide in the constructor
      * @return the result of the property found with the key passed
      */
     private String getText(String property){
