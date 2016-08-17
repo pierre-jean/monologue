@@ -71,7 +71,7 @@ public class TestMonologue {
         //given
         Monologue monologue = new Monologue();
         Instruction showWall = new Instruction(Action.FOLLOW, "Elliot", "ECorp");
-        MockUI ui = new MockUI(Arrays.asList(new Instruction[]{showWall}));
+        MockUI ui = new MockUI(Collections.singletonList(showWall));
         MockSocialStack socialStack =  new MockSocialStack(null);
         // when
         monologue.listenInstructions(ui, socialStack);
