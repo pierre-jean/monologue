@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import fr.baraud.codurance.monologue.ui.console.TextAndValues;
 import org.junit.Test;
 
 import fr.baraud.codurance.monologue.timelines.SocialStack;
@@ -139,7 +140,7 @@ public class TestMonologue {
         Properties props = new Properties();
         try {
             String testProperty = "DummyProperties.properties";
-            props = Monologue.loadProperties(testProperty);
+            props = TextAndValues.loadProperties(testProperty);
         } catch (IOException e) {
             e.printStackTrace();
         }
