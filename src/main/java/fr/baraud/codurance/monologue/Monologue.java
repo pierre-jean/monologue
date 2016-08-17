@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.Properties;
 
 import fr.baraud.codurance.monologue.timelines.SocialStack;
+import fr.baraud.codurance.monologue.timelines.Timeline;
 import fr.baraud.codurance.monologue.timelines.memory.MemorySocialStack;
 import fr.baraud.codurance.monologue.ui.Action;
 import fr.baraud.codurance.monologue.ui.Instruction;
 import fr.baraud.codurance.monologue.ui.UserInterface;
 import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
-import fr.baraud.codurance.monologue.ui.console.TextAndValues;
 
 /**
  * Monologue is a social networking application.
@@ -80,12 +80,26 @@ public class Monologue {
         Monologue monologue = new Monologue();
         Properties consoleProps = new Properties();
         try {
-            consoleProps = TextAndValues.loadProperties(CONSOLE_PROPERTIES);
+            consoleProps = Monologue.loadProperties(CONSOLE_PROPERTIES);
         } catch (IOException e) {
             e.printStackTrace();
         }
         monologue.listenInstructions(new ConsoleInterface(System.in, System.out, consoleProps), new MemorySocialStack());
     }
 
+    /**
+     * Helper to load a property within the classpath from its filename
+     * @param filename the file name if it is in the resource folder, or the file path
+     * @return a property file
+     * @throws IOException
+     */
+    public static Properties loadProperties(String filename) throws IOException{
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        Properties props = new Properties();
+        try(InputStream resourceStream = loader.getResourceAsStream(filename)) {
+            props.load(resourceStream);
+        }
+        return props;
+    }
 
 }

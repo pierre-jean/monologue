@@ -123,7 +123,7 @@ public class TestConsoleInterface {
         //then
         assertEquals(Action.SHOW_TIMELINE, instruction.getAction());
         assertEquals("Alice", instruction.getUser());
-        assertTrue(out.toString().contains(props.getProperty(TextAndValues.property_message_unknown_command)));
+        assertTrue(out.toString().contains(props.getProperty(ConsoleInterface.property_message_unknown_command)));
     }
 
     @Test
@@ -134,7 +134,7 @@ public class TestConsoleInterface {
         //when
         userInterface.close();
         //then
-        assertTrue(out.toString().contains(String.format(props.getProperty(TextAndValues.property_message_goodbye))));
+        assertTrue(out.toString().contains(String.format(props.getProperty(ConsoleInterface.property_message_goodbye))));
     }
 
     @Test
@@ -225,7 +225,7 @@ public class TestConsoleInterface {
         //when
         consoleInterface.writeHelp();
         //then
-        assertEquals(String.format(props.getProperty(TextAndValues.property_message_help)+"%n"),out.toString());
+        assertEquals(String.format(props.getProperty(ConsoleInterface.property_message_help)+"%n"),out.toString());
     }
     
     @Test
@@ -235,8 +235,8 @@ public class TestConsoleInterface {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         out.reset();
-        String result = String.format(props.getProperty(TextAndValues.property_message_info),
-            String.format(props.getProperty(TextAndValues.property_message_unknown_user), "Elliot"));
+        String result = String.format(props.getProperty(ConsoleInterface.property_message_info),
+            String.format(props.getProperty(ConsoleInterface.property_message_unknown_user), "Elliot"));
         //when
         consoleInterface.writeWarningUnknownUser("Elliot");
         //then
