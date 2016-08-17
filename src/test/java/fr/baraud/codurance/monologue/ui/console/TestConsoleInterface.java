@@ -16,9 +16,7 @@ import java.util.Properties;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by animus on 13/08/16.
- */
+
 public class TestConsoleInterface {
     private final static String consolePropertyName = "console-interface.properties";
 
@@ -204,9 +202,9 @@ public class TestConsoleInterface {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         String aliceName = "Alice";
-        Date date10secAgo = new Date(0l);
-        Date date5secAgo = new Date(5000l);
-        Date date = new Date(10000l);
+        Date date10secAgo = new Date(0L);
+        Date date5secAgo = new Date(5000L);
+        Date date = new Date(10000L);
         Timeline timeline1 = new Timeline("Hello", aliceName, date10secAgo, null);
         Timeline timeline4 = new Timeline("Indeed, there is", aliceName, date5secAgo, timeline1);
         out.reset();
@@ -254,11 +252,11 @@ public class TestConsoleInterface {
         String aliceName = "Alice";
         String johnName = "John";
         String bobName = "Bob";
-        Date date20secAgo = new Date(10000l);
-        Date date15secAgo = new Date(15000l);
-        Date date10secAgo = new Date(20000l);
-        Date date5secAgo = new Date(25000l);
-        Date now = new Date(30000l);
+        Date date20secAgo = new Date(10000L);
+        Date date15secAgo = new Date(15000L);
+        Date date10secAgo = new Date(20000L);
+        Date date5secAgo = new Date(25000L);
+        Date now = new Date(30000L);
         Timeline timeline1 = new Timeline("Hello", aliceName, date20secAgo, null);
         Timeline timeline2 = new Timeline("Welcome", johnName, date15secAgo, null);
         Timeline timeline3 = new Timeline("There is a nice vibe here!", bobName, date10secAgo, null);

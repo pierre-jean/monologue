@@ -8,9 +8,6 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-/**
- * Created by animus on 14/08/16.
- */
 public class TestUser {
 
     @Test

@@ -21,9 +21,9 @@ import java.util.Scanner;
 public class ConsoleInterface implements UserInterface{
 
     // property key to the logo (in ASCII) to display when app is launched
-    final static String property_message_logo = "ui.console.message.logo";
+    private final static String property_message_logo = "ui.console.message.logo";
     // property key to the welcome message when app is launched
-    final static String property_message_welcome = "ui.console.message.welcome";
+    private final static String property_message_welcome = "ui.console.message.welcome";
     // property key to the message displayed when app is closed
     final static String property_message_goodbye= "ui.console.message.goodbye";
     // property key to the help message providing guidance on command usages
@@ -35,49 +35,47 @@ public class ConsoleInterface implements UserInterface{
     // property key to format a message to the user (ex: adding a line return)
     final static String property_message_info = "ui.console.message.information.format";
     // property key to format a timeline (should take 2 arguments, the message and the delay)
-    final static String property_message_timeline = "ui.console.message.timeline.format";
+    private final static String property_message_timeline = "ui.console.message.timeline.format";
     // property key to format a wall (should take 3 arguments, the user, the message and the delay)
-    final static String property_message_wall = "ui.console.message.wall.format";
+    private final static String property_message_wall = "ui.console.message.wall.format";
     // property key to the unit base second in singular
-    final static String property_message_second_ago = "ui.console.message.second.ago";
+    private final static String property_message_second_ago = "ui.console.message.second.ago";
     // property key to the unit base second in plural
-    final static String property_message_seconds_ago = "ui.console.message.seconds.ago";
+    private final static String property_message_seconds_ago = "ui.console.message.seconds.ago";
     // property key to the unit base second in singular
-    final static String property_message_minute_ago = "ui.console.message.minute.ago";
+    private final static String property_message_minute_ago = "ui.console.message.minute.ago";
     // property key to the unit base second in plural
-    final static String property_message_minutes_ago = "ui.console.message.minutes.ago";
+    private final static String property_message_minutes_ago = "ui.console.message.minutes.ago";
     // property key to the unit base second in singular
-    final static String property_message_hour_ago = "ui.console.message.hour.ago";
+    private final static String property_message_hour_ago = "ui.console.message.hour.ago";
     // property key to the unit base second in plural
-    final static String property_message_hours_ago = "ui.console.message.hours.ago";
+    private final static String property_message_hours_ago = "ui.console.message.hours.ago";
     // property key to the unit base second in singular
-    final static String property_message_day_ago = "ui.console.message.day.ago";
+    private final static String property_message_day_ago = "ui.console.message.day.ago";
     // property key to the unit base second in plural
-    final static String property_message_days_ago = "ui.console.message.days.ago";
+    private final static String property_message_days_ago = "ui.console.message.days.ago";
     // property key to the unit base second in singular
-    final static String property_message_month_ago = "ui.console.message.month.ago";
+    private final static String property_message_month_ago = "ui.console.message.month.ago";
     // property key to the unit base second in plural
-    final static String property_message_months_ago = "ui.console.message.months.ago";
+    private final static String property_message_months_ago = "ui.console.message.months.ago";
     // property key to the unit base year in singular
-    final static String property_message_year_ago = "ui.console.message.year.ago";
+    private final static String property_message_year_ago = "ui.console.message.year.ago";
     // property key to the unit base year in plural
-    final static String property_message_years_ago = "ui.console.message.years.ago";
+    private final static String property_message_years_ago = "ui.console.message.years.ago";
     // property key to the pattern used to recognised the post instruction
-    final static String property_instruction_post= "ui.console.instructions.post";
+    private final static String property_instruction_post= "ui.console.instructions.post";
     // property key to the pattern used to recognised the wall instruction
-    final static String property_instruction_wall= "ui.console.instructions.wall";
+    private final static String property_instruction_wall= "ui.console.instructions.wall";
     // property key to the pattern used to recognised the follow instruction
-    final static String property_instruction_follow= "ui.console.instructions.follow";
+    private final static String property_instruction_follow= "ui.console.instructions.follow";
     // property key to the pattern used to recognised the help instruction
-    final static String property_instruction_help="ui.console.instructions.help";
+    private final static String property_instruction_help="ui.console.instructions.help";
     // property key to the pattern used to recognised the quit instruction
-    final static String property_instruction_quit= "ui.console.instructions.quit";
+    private final static String property_instruction_quit= "ui.console.instructions.quit";
     // property key to the pattern used to split the instruction in sequences
-    final static String property_instruction_split="ui.console.instructions.split";
+    private final static String property_instruction_split="ui.console.instructions.split";
     // property key to the pattern printed before an instruction invite
-    final static String property_display_instruction = "ui.console.display.instruction";
-    // property key to the space separator
-    final static String property_display_space = "ui.console.display.space";
+    private final static String property_display_instruction = "ui.console.display.instruction";
 
     /**
      * The properties that contains messages and display custom patters
@@ -126,7 +124,7 @@ public class ConsoleInterface implements UserInterface{
 
     /**
      * display text to the user interface
-     * @param information the text to display to the user
+     * @param text the text to display to the user
      */
     private void write(String text) {
         try {
@@ -138,7 +136,7 @@ public class ConsoleInterface implements UserInterface{
     }
 
     /**
-     * Write an information to the output, formated as an information
+     * Write an information to the output, formatted as an information
      * (for instance a line return at the end)
      *
      * @param information the message to display
@@ -209,7 +207,7 @@ public class ConsoleInterface implements UserInterface{
      * 1 unit. Ex: %1d second ago 
      * @param delayExpressionPlural the sentence to express the delay for more
      * than 1 unit. Ex: %1d seconds ago 
-     * @return the formatted delayExpression, the plural versio or the singular 
+     * @return the formatted delayExpression, the plural version or the singular
      * version depending if the division delay/unit is superior to one or not.
      */
     String printInUnit(long delay, long unit, String delayExpressionSingular,

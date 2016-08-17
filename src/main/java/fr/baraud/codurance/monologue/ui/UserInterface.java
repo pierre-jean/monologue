@@ -30,7 +30,7 @@ public interface UserInterface {
     /**
      * Send and display the wall of an user,
      * aggregation of multiple users' timelines
-     * @param wall
+     * @param wall the wall you wish to display
      * @param currentTime the current time, used to print the delay since the 
      * post was created
      */

@@ -20,7 +20,7 @@ import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
  */
 public class Monologue {
 
-    public final static String CONSOLE_PROPERTIES = "console-interface.properties";
+    private final static String CONSOLE_PROPERTIES = "console-interface.properties";
 
     /**
      * listenInstructions will wait and loop on user instructions.
@@ -31,7 +31,7 @@ public class Monologue {
      * @see fr.baraud.codurance.monologue.timelines.SocialStack
      * @see fr.baraud.codurance.monologue.ui.UserInterface
      */
-    public void listenInstructions(UserInterface userInterface, SocialStack socialStack){
+    void listenInstructions(UserInterface userInterface, SocialStack socialStack){
         Instruction instruction;
         do {
             instruction = userInterface.getNextInstruction();
@@ -68,6 +68,8 @@ public class Monologue {
                     userInterface.writeHelp();
                 case EXIT:
                     break;
+                default:
+                    System.out.println("Unrecognized action: "+instruction.getAction());
             }
         } while (Action.EXIT != instruction.getAction());
         userInterface.close();

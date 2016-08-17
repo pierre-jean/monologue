@@ -20,8 +20,6 @@ import fr.baraud.codurance.monologue.ui.UserInterface;
 
 public class TestMonologue {
 
-    private final String testProperty = "DummyProperties.properties";
-
     @Test
     public void listen_receivePostInstruction_callSocialStackPostMethod(){
         //given
@@ -83,7 +81,7 @@ public class TestMonologue {
     }
 
     @Test
-    public void listen_receiveFollowUnknowUser_callUIWriteWarningUnknownUser(){
+    public void listen_receiveFollowUnknownUser_callUIWriteWarningUnknownUser(){
         //given
         Monologue monologue = new Monologue();
         Instruction showWall = new Instruction(Action.FOLLOW, "Santa", "ECorp");
@@ -140,6 +138,7 @@ public class TestMonologue {
     public void loadProperties_keyHello_equalsWorld(){
         Properties props = new Properties();
         try {
+            String testProperty = "DummyProperties.properties";
             props = Monologue.loadProperties(testProperty);
         } catch (IOException e) {
             e.printStackTrace();
@@ -158,7 +157,7 @@ public class TestMonologue {
         public String follower;
         public String following;
 
-        Timeline timeline;
+        final Timeline timeline;
 
         public MockSocialStack(Timeline timeline) {
             this.timeline = timeline;
@@ -194,10 +193,7 @@ public class TestMonologue {
 
         @Override
         public boolean userExist(String user) {
-            if ("Elliot".equals(user) || "ECorp".equals(user)){
-                return true;
-            }
-            return false;
+            return "Elliot".equals(user) || "ECorp".equals(user);
         }
 
     }
@@ -208,7 +204,7 @@ public class TestMonologue {
      */
     private class MockUI implements UserInterface {
 
-        public Iterator<Instruction> instIterator;
+        public final Iterator<Instruction> instIterator;
         public Timeline lastWrittenTimeline;
         public Timeline lastWrittenWall;
         public String unknownUser;
@@ -220,7 +216,7 @@ public class TestMonologue {
 
         @Override
         public Instruction getNextInstruction() {
-            while (instIterator.hasNext()){
+            if (instIterator.hasNext()){
                 return instIterator.next();
             }
             return new Instruction(Action.EXIT, null, null);
