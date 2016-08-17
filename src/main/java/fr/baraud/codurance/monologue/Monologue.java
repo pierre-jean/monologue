@@ -40,19 +40,17 @@ public class Monologue {
                     socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
                     break;
                 case SHOW_TIMELINE:
-                    Timeline timeline = socialStack.getTimeline(instruction.getUser());
-                    if (timeline == null){
+                    if (!socialStack.userExist(instruction.getUser())){
                         userInterface.writeWarningUnknownUser(instruction.getUser());
                     } else {
-                        userInterface.writeTimeline(timeline, new Date());
+                        userInterface.writeTimeline(socialStack.getTimeline(instruction.getUser()), new Date());
                     }
                     break;
                 case SHOW_WALL:
-                    Timeline wall = socialStack.getWall(instruction.getUser());
-                    if (wall == null){
+                    if (!socialStack.userExist(instruction.getUser())){
                         userInterface.writeWarningUnknownUser(instruction.getUser());
                     } else {
-                        userInterface.writeWall(wall, new Date());
+                        userInterface.writeWall(socialStack.getWall(instruction.getUser()), new Date());
                     }
                     break;
                 case FOLLOW:

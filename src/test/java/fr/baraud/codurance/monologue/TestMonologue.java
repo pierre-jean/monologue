@@ -111,7 +111,7 @@ public class TestMonologue {
         //given
         Monologue monologue = new Monologue();
         Instruction showTimeline = new Instruction(Action.SHOW_TIMELINE,
-            "Elliot", null);
+            "Santa", null);
         MockUI ui = new MockUI(Collections.singletonList(showTimeline));
         MockSocialStack socialStack =  new MockSocialStack(null);
         // when
@@ -124,7 +124,7 @@ public class TestMonologue {
     public void listen_wallForUnknownUser_callUIWriteWarningUnknownUser(){
         //given
         Monologue monologue = new Monologue();
-        Instruction showWall = new Instruction(Action.SHOW_WALL, "Elliot",
+        Instruction showWall = new Instruction(Action.SHOW_WALL, "Santa",
             null);
         MockUI ui = new MockUI(Collections.singletonList(showWall));
         MockSocialStack socialStack =  new MockSocialStack(null);
