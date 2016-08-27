@@ -35,40 +35,7 @@ public class Monologue {
         Instruction instruction;
         do {
             instruction = userInterface.getNextInstruction();
-            switch (instruction.getAction()){
-                case POST:
-                    socialStack = socialStack.post(instruction.getUser(), instruction.getContent(), new Date());
-                    break;
-                case SHOW_TIMELINE:
-                    if (!socialStack.userExist(instruction.getUser())){
-                        userInterface.writeWarningUnknownUser(instruction.getUser());
-                    } else {
-                        userInterface.writeTimeline(socialStack.getTimeline(instruction.getUser()), new Date());
-                    }
-                    break;
-                case SHOW_WALL:
-                    if (!socialStack.userExist(instruction.getUser())){
-                        userInterface.writeWarningUnknownUser(instruction.getUser());
-                    } else {
-                        userInterface.writeWall(socialStack.getWall(instruction.getUser()), new Date());
-                    }
-                    break;
-                case FOLLOW:
-                    if (!socialStack.userExist(instruction.getUser())){
-                        userInterface.writeWarningUnknownUser(instruction.getUser());
-                    } else if (!socialStack.userExist(instruction.getContent())){
-                        userInterface.writeWarningUnknownUser(instruction.getContent());
-                    } else{
-                        socialStack = socialStack.follow(instruction.getUser(), instruction.getContent());
-                    }
-                    break;
-                case HELP:
-                    userInterface.writeHelp();
-                case EXIT:
-                    break;
-                default:
-                    System.out.println("Unrecognized action: "+instruction.getAction());
-            }
+            socialStack = instruction.apply(socialStack, userInterface, new Date());
         } while (Action.EXIT != instruction.getAction());
         userInterface.close();
     }

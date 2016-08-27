@@ -1,7 +1,6 @@
 package fr.baraud.codurance.monologue.ui.console;
 
 import fr.baraud.codurance.monologue.timelines.Timeline;
-import fr.baraud.codurance.monologue.ui.Action;
 import fr.baraud.codurance.monologue.ui.Instruction;
 import fr.baraud.codurance.monologue.ui.UserInterface;
 
@@ -11,6 +10,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * Console interface is an implementation of a UserInterface that provides 
@@ -21,61 +21,61 @@ import java.util.Scanner;
 public class ConsoleInterface implements UserInterface{
 
     // property key to the logo (in ASCII) to display when app is launched
-    private final static String property_message_logo = "ui.console.message.logo";
+    private static final String PROPERTY_MESSAGE_LOGO = "ui.console.message.logo";
     // property key to the welcome message when app is launched
-    private final static String property_message_welcome = "ui.console.message.welcome";
+    private static final String PROPERTY_MESSAGE_WELCOME = "ui.console.message.welcome";
     // property key to the message displayed when app is closed
-    final static String property_message_goodbye= "ui.console.message.goodbye";
+    private static final  String PROPERTY_MESSAGE_GOODBYE = "ui.console.message.goodbye";
     // property key to the help message providing guidance on command usages
-    final static String property_message_help= "ui.console.message.help";
+    private static final String PROPERTY_MESSAGE_HELP = "ui.console.message.help";
     // property key to the warning message when an instruction is not recognized
-    final static String property_message_unknown_command= "ui.console.message.unknown.command";
+    private static final String PROPERTY_MESSAGE_UNKNOWN_COMMAND = "ui.console.message.unknown.command";
     // property key to the warning message when a user is not found
-    final static String property_message_unknown_user = "ui.console.message.unknown.user";
+    private static final String PROPERTY_MESSAGE_UNKNOWN_USER = "ui.console.message.unknown.user";
     // property key to format a message to the user (ex: adding a line return)
-    final static String property_message_info = "ui.console.message.information.format";
+    private static final String PROPERTY_MESSAGE_INFO = "ui.console.message.information.format";
     // property key to format a timeline (should take 2 arguments, the message and the delay)
-    private final static String property_message_timeline = "ui.console.message.timeline.format";
+    private static final String PROPERTY_MESSAGE_TIMELINE = "ui.console.message.timeline.format";
     // property key to format a wall (should take 3 arguments, the user, the message and the delay)
-    private final static String property_message_wall = "ui.console.message.wall.format";
+    private static final String PROPERTY_MESSAGE_WALL = "ui.console.message.wall.format";
     // property key to the unit base second in singular
-    private final static String property_message_second_ago = "ui.console.message.second.ago";
+    private static final String PROPERTY_MESSAGE_SECOND_AGO = "ui.console.message.second.ago";
     // property key to the unit base second in plural
-    private final static String property_message_seconds_ago = "ui.console.message.seconds.ago";
+    private static final String PROPERTY_MESSAGE_SECONDS_AGO = "ui.console.message.seconds.ago";
     // property key to the unit base second in singular
-    private final static String property_message_minute_ago = "ui.console.message.minute.ago";
+    private static final String PROPERTY_MESSAGE_MINUTE_AGO = "ui.console.message.minute.ago";
     // property key to the unit base second in plural
-    private final static String property_message_minutes_ago = "ui.console.message.minutes.ago";
+    private static final String PROPERTY_MESSAGE_MINUTES_AGO = "ui.console.message.minutes.ago";
     // property key to the unit base second in singular
-    private final static String property_message_hour_ago = "ui.console.message.hour.ago";
+    private static final String PROPERTY_MESSAGE_HOUR_AGO = "ui.console.message.hour.ago";
     // property key to the unit base second in plural
-    private final static String property_message_hours_ago = "ui.console.message.hours.ago";
+    private static final String PROPERTY_MESSAGE_HOURS_AGO = "ui.console.message.hours.ago";
     // property key to the unit base second in singular
-    private final static String property_message_day_ago = "ui.console.message.day.ago";
+    private static final String PROPERTY_MESSAGE_DAY_AGO = "ui.console.message.day.ago";
     // property key to the unit base second in plural
-    private final static String property_message_days_ago = "ui.console.message.days.ago";
+    private static final String PROPERTY_MESSAGE_DAYS_AGO = "ui.console.message.days.ago";
     // property key to the unit base second in singular
-    private final static String property_message_month_ago = "ui.console.message.month.ago";
+    private static final String PROPERTY_MESSAGE_MONTH_AGO = "ui.console.message.month.ago";
     // property key to the unit base second in plural
-    private final static String property_message_months_ago = "ui.console.message.months.ago";
+    private static final String PROPERTY_MESSAGE_MONTHS_AGO = "ui.console.message.months.ago";
     // property key to the unit base year in singular
-    private final static String property_message_year_ago = "ui.console.message.year.ago";
+    private static final String PROPERTY_MESSAGE_YEAR_AGO = "ui.console.message.year.ago";
     // property key to the unit base year in plural
-    private final static String property_message_years_ago = "ui.console.message.years.ago";
+    private static final String PROPERTY_MESSAGE_YEARS_AGO = "ui.console.message.years.ago";
     // property key to the pattern used to recognised the post instruction
-    private final static String property_instruction_post= "ui.console.instructions.post";
+    private static final String PROPERTY_INSTRUCTION_POST = "ui.console.instructions.post";
     // property key to the pattern used to recognised the wall instruction
-    private final static String property_instruction_wall= "ui.console.instructions.wall";
+    private static final String PROPERTY_INSTRUCTION_WALL = "ui.console.instructions.wall";
     // property key to the pattern used to recognised the follow instruction
-    private final static String property_instruction_follow= "ui.console.instructions.follow";
+    private static final String PROPERTY_INSTRUCTION_FOLLOW = "ui.console.instructions.follow";
     // property key to the pattern used to recognised the help instruction
-    private final static String property_instruction_help="ui.console.instructions.help";
+    private static final String PROPERTY_INSTRUCTION_HELP ="ui.console.instructions.help";
     // property key to the pattern used to recognised the quit instruction
-    private final static String property_instruction_quit= "ui.console.instructions.quit";
+    private static final String PROPERTY_INSTRUCTION_QUIT = "ui.console.instructions.quit";
     // property key to the pattern used to split the instruction in sequences
-    private final static String property_instruction_split="ui.console.instructions.split";
+    private static final String PROPERTY_INSTRUCTION_SPLIT ="ui.console.instructions.split";
     // property key to the pattern printed before an instruction invite
-    private final static String property_display_instruction = "ui.console.display.instruction";
+    private static final String PROPERTY_DISPLAY_INSTRUCTION = "ui.console.display.instruction";
 
     /**
      * The properties that contains messages and display custom patters
@@ -91,6 +91,8 @@ public class ConsoleInterface implements UserInterface{
      * The output to display information to the user, typically the standard output
      */
     private final OutputStream userDisplayStream;
+
+    private final Logger logger = Logger.getLogger(ConsoleInterface.class.getCanonicalName());
 
     /**
      * Create an instance of ConsoleInterface, that will read from the provided input
@@ -116,7 +118,7 @@ public class ConsoleInterface implements UserInterface{
     public Instruction getNextInstruction() {
         Instruction userInstruction;
         do {
-            write(getText(property_display_instruction));
+            write(getText(PROPERTY_DISPLAY_INSTRUCTION));
             userInstruction = parseInstruction(userInputScanner.nextLine());
         } while (userInstruction == null);
         return userInstruction;
@@ -131,7 +133,7 @@ public class ConsoleInterface implements UserInterface{
             userDisplayStream.write(String.format(text).getBytes());
             userDisplayStream.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
@@ -140,10 +142,10 @@ public class ConsoleInterface implements UserInterface{
      * (for instance a line return at the end)
      *
      * @param information the message to display
-     * @see #property_message_info
+     * @see #PROPERTY_MESSAGE_INFO
      */
     private void writeInformation(String information){
-        String messageFormat = properties.getProperty(property_message_info);
+        String messageFormat = properties.getProperty(PROPERTY_MESSAGE_INFO);
         write(String.format(messageFormat, information));
     }
 
@@ -152,7 +154,7 @@ public class ConsoleInterface implements UserInterface{
      */
     @Override
     public void writeHelp(){
-        writeInformation(getText(property_message_help));
+        writeInformation(getText(PROPERTY_MESSAGE_HELP));
     }
 
     /**
@@ -161,7 +163,7 @@ public class ConsoleInterface implements UserInterface{
      */
     @Override
     public void writeWarningUnknownUser(String user) {
-        writeInformation(String.format(getText(property_message_unknown_user),
+        writeInformation(String.format(getText(PROPERTY_MESSAGE_UNKNOWN_USER),
             user));
     }
 
@@ -173,7 +175,7 @@ public class ConsoleInterface implements UserInterface{
     public void writeTimeline(Timeline timeline, Date currentTime) {
         if (timeline != null){
             writeInformation(String.format(
-                properties.getProperty(property_message_timeline),
+                properties.getProperty(PROPERTY_MESSAGE_TIMELINE),
                 timeline.getMessage(),
                 printDelay(timeline.getMessageTimestamp(), currentTime)));
             writeTimeline(timeline.getNext(), currentTime);
@@ -188,7 +190,7 @@ public class ConsoleInterface implements UserInterface{
     public void writeWall(Timeline wall, Date currentTime) {
         if (wall != null){
             writeInformation(String.format(
-                properties.getProperty(property_message_wall),
+                properties.getProperty(PROPERTY_MESSAGE_WALL),
                 wall.getUser(),
                 wall.getMessage(),
                 printDelay(wall.getMessageTimestamp(), currentTime)));
@@ -241,32 +243,32 @@ public class ConsoleInterface implements UserInterface{
         long delay = now.getTime() - firstDate.getTime();
         if (delay < ONE_MIN_IN_MS){
             return printInUnit(delay, ONE_SECOND_IN_MS,
-                getText(property_message_second_ago),
-                getText(property_message_seconds_ago));
+                getText(PROPERTY_MESSAGE_SECOND_AGO),
+                getText(PROPERTY_MESSAGE_SECONDS_AGO));
         }
         if (delay < ONE_HOUR_IN_MS){
             return printInUnit(delay, ONE_MIN_IN_MS,
-                getText(property_message_minute_ago),
-                getText(property_message_minutes_ago));
+                getText(PROPERTY_MESSAGE_MINUTE_AGO),
+                getText(PROPERTY_MESSAGE_MINUTES_AGO));
         }
         if (delay < ONE_DAY_IN_MS) {
             return printInUnit(delay, ONE_HOUR_IN_MS,
-                getText(property_message_hour_ago),
-                getText(property_message_hours_ago));
+                getText(PROPERTY_MESSAGE_HOUR_AGO),
+                getText(PROPERTY_MESSAGE_HOURS_AGO));
         }
         if (delay < ONE_MONTH_IN_MS) {
             return printInUnit(delay, ONE_DAY_IN_MS,
-                getText(property_message_day_ago),
-                getText(property_message_days_ago));
+                getText(PROPERTY_MESSAGE_DAY_AGO),
+                getText(PROPERTY_MESSAGE_DAYS_AGO));
         }
         if (delay < ONE_YEAR_IN_MS) {
             return printInUnit(delay, ONE_MONTH_IN_MS,
-                getText(property_message_month_ago),
-                getText(property_message_months_ago));
+                getText(PROPERTY_MESSAGE_MONTH_AGO),
+                getText(PROPERTY_MESSAGE_MONTHS_AGO));
         }
         return printInUnit(delay, ONE_YEAR_IN_MS,
-            getText(property_message_year_ago),
-            getText(property_message_years_ago));
+            getText(PROPERTY_MESSAGE_YEAR_AGO),
+            getText(PROPERTY_MESSAGE_YEARS_AGO));
     }
 
     /**
@@ -279,41 +281,37 @@ public class ConsoleInterface implements UserInterface{
      * the pattern could not be mapped to any known Instruction
      */
     private Instruction parseInstruction(String userEntry){
-        final int EMPTY_INSTRUCTION = 0;
-        final int ONE_WORD_INSTRUTION = 1;
+        final int ONE_WORD_INSTRUCTION = 1;
         final int TWO_WORD_INSTRUCTION = 2;
-        final String quitInstruction = getText(property_instruction_quit);
-        final String followInstruction = getText(property_instruction_follow);
-        final String postInstruction = getText(property_instruction_post);
-        final String helpInstruction = getText(property_instruction_help);
-        final String wallInstruction = getText(property_instruction_wall);
+        final String quitInstruction = getText(PROPERTY_INSTRUCTION_QUIT);
+        final String followInstruction = getText(PROPERTY_INSTRUCTION_FOLLOW);
+        final String postInstruction = getText(PROPERTY_INSTRUCTION_POST);
+        final String helpInstruction = getText(PROPERTY_INSTRUCTION_HELP);
+        final String wallInstruction = getText(PROPERTY_INSTRUCTION_WALL);
 
         String[] instructionParts = userEntry.split(
-            getText(property_instruction_split));
+            getText(PROPERTY_INSTRUCTION_SPLIT));
         switch (instructionParts.length){
 
-            case EMPTY_INSTRUCTION:
-                return null;
-
-            case ONE_WORD_INSTRUTION:
+            case ONE_WORD_INSTRUCTION:
                 String firstElement = instructionParts[0];
                 if (firstElement.isEmpty()){
-                    writeInformation(getText(property_message_unknown_command));
+                    write("");
                     return null;
                 }
                 if (firstElement.equals(quitInstruction)){
-                    return new Instruction(Action.EXIT, null, null);
+                    return new ExitInstruction();
                 }
                 if (firstElement.equals(helpInstruction)){
-                    return new Instruction(Action.HELP, null, null);
+                    return new HelpInstruction();
                 }
-                return new Instruction(Action.SHOW_TIMELINE, instructionParts[0], null);
+                return new ShowTimelineInstruction(instructionParts[0]);
 
             case TWO_WORD_INSTRUCTION:
                 if (instructionParts[1].equals(wallInstruction)){
-                    return new Instruction(Action.SHOW_WALL, instructionParts[0], null);
+                    return new ShowWallInstruction(instructionParts[0]);
                 }
-                writeInformation(getText(property_message_unknown_command));
+                writeInformation(getText(PROPERTY_MESSAGE_UNKNOWN_COMMAND));
                 return null;
 
             //3 or more words for instruction
@@ -321,19 +319,15 @@ public class ConsoleInterface implements UserInterface{
                 String secondElement = instructionParts[1];
                 if (secondElement.equals(postInstruction)){
                     String postMessage = userEntry.replaceFirst(
-                        instructionParts[0]+getText(property_instruction_split)
-                            +instructionParts[1]+getText(property_instruction_split),
+                        instructionParts[0]+getText(PROPERTY_INSTRUCTION_SPLIT)
+                            +instructionParts[1]+getText(PROPERTY_INSTRUCTION_SPLIT),
                         "");
-                    return new Instruction(Action.POST,
-                        instructionParts[0],
-                        postMessage);
+                    return new PostInstruction(instructionParts[0], postMessage);
                 }
                 if (secondElement.equals(followInstruction)){
-                    return new Instruction(Action.FOLLOW,
-                        instructionParts[0],
-                        instructionParts[2]);
+                    return new FollowInstruction(instructionParts[0], instructionParts[2]);
                 }
-                writeInformation(getText(property_message_unknown_command));
+                writeInformation(getText(PROPERTY_MESSAGE_UNKNOWN_COMMAND));
                 return null;
 
         }
@@ -343,15 +337,15 @@ public class ConsoleInterface implements UserInterface{
      * Display to the interface the welcome message
      */
     private void sayHello() {
-        writeInformation(getText(property_message_logo));
-        writeInformation(getText(property_message_welcome));
+        writeInformation(getText(PROPERTY_MESSAGE_LOGO));
+        writeInformation(getText(PROPERTY_MESSAGE_WELCOME));
     }
 
     /**
      * Display to the interface the goodbye message
      */
     private void sayBye() {
-        writeInformation(getText(property_message_goodbye));
+        writeInformation(getText(PROPERTY_MESSAGE_GOODBYE));
     }
 
     /**

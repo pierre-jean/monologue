@@ -18,7 +18,16 @@ import static org.junit.Assert.assertTrue;
 
 
 public class TestConsoleInterface {
+
     private final static String consolePropertyName = "console-interface.properties";
+
+    private final static String PROPERTY_MESSAGE_GOODBYE = "ui.console.message.goodbye";
+    private static final String PROPERTY_MESSAGE_HELP = "ui.console.message.help";
+    private static final String PROPERTY_MESSAGE_INFO = "ui.console.message.information.format";
+    private static final String PROPERTY_MESSAGE_UNKNOWN_USER = "ui.console.message.unknown.user";
+    private static final String PROPERTY_MESSAGE_UNKNOWN_COMMAND = "ui.console.message.unknown.command";
+    private static final String PROPERTY_DISPLAY_INSTRUCTION = "ui.console.display.instruction";
+
 
     private Properties props;
 
@@ -44,8 +53,7 @@ public class TestConsoleInterface {
         Instruction instruction = userInterface.getNextInstruction();
         //then
         assertEquals(Action.POST, instruction.getAction());
-        assertEquals("Alice", instruction.getUser());
-        assertEquals("The sky is blue", instruction.getContent());
+        assertEquals(PostInstruction.class, instruction.getClass());
     }
 
     @Test
@@ -57,8 +65,7 @@ public class TestConsoleInterface {
         //when
         Instruction instruction = userInterface.getNextInstruction();
         //then
-        assertEquals(Action.SHOW_TIMELINE, instruction.getAction());
-        assertEquals("Alice", instruction.getUser());
+        assertEquals(ShowTimelineInstruction.class, instruction.getClass());
     }
 
     @Test
@@ -70,8 +77,7 @@ public class TestConsoleInterface {
         //when
         Instruction instruction = userInterface.getNextInstruction();
         //then
-        assertEquals(Action.SHOW_WALL, instruction.getAction());
-        assertEquals("Alice", instruction.getUser());
+        assertEquals(ShowWallInstruction.class, instruction.getClass());
     }
 
     @Test
@@ -80,9 +86,7 @@ public class TestConsoleInterface {
         UserInterface userInterface = new ConsoleInterface(new ByteArrayInputStream(aliceFollowsBob.getBytes()),
             new ByteArrayOutputStream(), props);
         Instruction instruction = userInterface.getNextInstruction();
-        assertEquals(Action.FOLLOW, instruction.getAction());
-        assertEquals("Alice", instruction.getUser());
-        assertEquals("Bob", instruction.getContent());
+        assertEquals(FollowInstruction.class, instruction.getClass());
     }
 
     @Test
@@ -94,7 +98,7 @@ public class TestConsoleInterface {
             new ByteArrayOutputStream(), props);
         Instruction instruction = userInterface.getNextInstruction();
         //then
-        assertEquals(Action.EXIT, instruction.getAction());
+        assertEquals(ExitInstruction.class, instruction.getClass());
     }
 
     @Test
@@ -106,7 +110,7 @@ public class TestConsoleInterface {
         //when
         Instruction instruction = userInterface.getNextInstruction();
         //then
-        assertEquals(Action.HELP, instruction.getAction());
+        assertEquals(HelpInstruction.class, instruction.getClass());
     }
 
     @Test
@@ -121,9 +125,7 @@ public class TestConsoleInterface {
         //when
         Instruction instruction = userInterface.getNextInstruction();
         //then
-        assertEquals(Action.SHOW_TIMELINE, instruction.getAction());
-        assertEquals("Alice", instruction.getUser());
-        assertTrue(out.toString().contains(props.getProperty(ConsoleInterface.property_message_unknown_command)));
+        assertEquals(ShowTimelineInstruction.class, instruction.getClass());
     }
 
     @Test
@@ -134,7 +136,7 @@ public class TestConsoleInterface {
         //when
         userInterface.close();
         //then
-        assertTrue(out.toString().contains(String.format(props.getProperty(ConsoleInterface.property_message_goodbye))));
+        assertTrue(out.toString().contains(String.format(props.getProperty(PROPERTY_MESSAGE_GOODBYE))));
     }
 
     @Test
@@ -225,7 +227,7 @@ public class TestConsoleInterface {
         //when
         consoleInterface.writeHelp();
         //then
-        assertEquals(String.format(props.getProperty(ConsoleInterface.property_message_help)+"%n"),out.toString());
+        assertEquals(String.format(props.getProperty(PROPERTY_MESSAGE_HELP)+"%n"),out.toString());
     }
     
     @Test
@@ -235,8 +237,8 @@ public class TestConsoleInterface {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
         out.reset();
-        String result = String.format(props.getProperty(ConsoleInterface.property_message_info),
-            String.format(props.getProperty(ConsoleInterface.property_message_unknown_user), "Elliot"));
+        String result = String.format(props.getProperty(PROPERTY_MESSAGE_INFO),
+            String.format(props.getProperty(PROPERTY_MESSAGE_UNKNOWN_USER), "Elliot"));
         //when
         consoleInterface.writeWarningUnknownUser("Elliot");
         //then
@@ -275,6 +277,33 @@ public class TestConsoleInterface {
         consoleInterface.writeWall(aliceWall, now);
         //then
         assertEquals(result, out.toString());
+    }
+
+    @Test
+    public void emptyInstruction_ShouldPrintNewInstructionInvitation(){
+        //given
+        ByteArrayInputStream in =  new ByteArrayInputStream("%nquit%n".getBytes());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
+        out.reset();
+        String result = String.format(props.getProperty(PROPERTY_DISPLAY_INSTRUCTION), "");
+        //when
+        consoleInterface.getNextInstruction();
+        //then
+        assertEquals(result, out.toString());
+    }
+
+    @Test
+    public void instruction_UnknownInstructionShouldPrintWarningMessage(){
+        //given
+        ByteArrayInputStream in =  new ByteArrayInputStream(String.format("Unknown instructions composition%nquit%n").getBytes());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ConsoleInterface consoleInterface = new ConsoleInterface(in, out, props);
+        out.reset();
+        //when
+        consoleInterface.getNextInstruction();
+        //then
+        assertTrue(out.toString().contains(props.getProperty(PROPERTY_MESSAGE_UNKNOWN_COMMAND)));
     }
 
 }
