@@ -8,9 +8,9 @@ import fr.baraud.codurance.monologue.ui.UserInterface;
 import java.util.Date;
 
 /**
- * Created by animus on 19/08/16.
+ * Show wall instructions triggers the display of the user wall to the user interface
  */
-public class ShowWallInstruction  implements Instruction{
+public class ShowWallInstruction implements Instruction{
 
     private final String user;
 

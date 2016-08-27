@@ -8,7 +8,7 @@ import fr.baraud.codurance.monologue.ui.UserInterface;
 import java.util.Date;
 
 /**
- * Created by animus on 18/08/16.
+ * PostInstruction build a new SocialStack with an updated timeline for the user that posted the message
  */
 public class PostInstruction implements Instruction {
 

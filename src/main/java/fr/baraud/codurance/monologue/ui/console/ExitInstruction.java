@@ -8,7 +8,7 @@ import fr.baraud.codurance.monologue.ui.UserInterface;
 import java.util.Date;
 
 /**
- * Created by animus on 22/08/16.
+ * Exit Instruction breaks the listen loop of the program and allows it to quit
  */
 public class ExitInstruction implements Instruction{
 

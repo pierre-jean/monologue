@@ -1,6 +1,7 @@
 package fr.baraud.codurance.monologue.timelines;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A User is a representation of a Monologue user once he/she published. 
@@ -56,5 +57,10 @@ public class User {
         return name.equals(user.getName())
             && following.equals(user.getFollowing())
             && timeline.equals(user.getTimeline());
+    }
+
+    @Override
+    public int hashCode() {
+        return  Objects.hash(name, following);
     }
 }

@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.baraud.codurance.monologue.timelines.SocialStack;
-import fr.baraud.codurance.monologue.timelines.Timeline;
 import fr.baraud.codurance.monologue.timelines.memory.MemorySocialStack;
 import fr.baraud.codurance.monologue.ui.Action;
 import fr.baraud.codurance.monologue.ui.Instruction;
@@ -20,7 +21,7 @@ import fr.baraud.codurance.monologue.ui.console.ConsoleInterface;
  */
 public class Monologue {
 
-    private final static String CONSOLE_PROPERTIES = "console-interface.properties";
+    private static final String CONSOLE_PROPERTIES = "console-interface.properties";
 
     /**
      * listenInstructions will wait and loop on user instructions.
@@ -33,9 +34,10 @@ public class Monologue {
      */
     void listenInstructions(UserInterface userInterface, SocialStack socialStack){
         Instruction instruction;
+        SocialStack newSocialStack = socialStack;
         do {
             instruction = userInterface.getNextInstruction();
-            socialStack = instruction.apply(socialStack, userInterface, new Date());
+            newSocialStack = instruction.apply(newSocialStack, userInterface, new Date());
         } while (Action.EXIT != instruction.getAction());
         userInterface.close();
     }
@@ -46,10 +48,11 @@ public class Monologue {
     public static void main(String[] args) {
         Monologue monologue = new Monologue();
         Properties consoleProps = new Properties();
+        Logger logger = Logger.getLogger(Monologue.class.getCanonicalName());
         try {
             consoleProps = Monologue.loadProperties(CONSOLE_PROPERTIES);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
         monologue.listenInstructions(new ConsoleInterface(System.in, System.out, consoleProps), new MemorySocialStack());
     }
@@ -58,9 +61,9 @@ public class Monologue {
      * Helper to load a property within the classpath from its filename
      * @param filename the file name if it is in the resource folder, or the file path
      * @return a property file
-     * @throws IOException
+     * @throws IOException if something goes wrong when reading the property file
      */
-    public static Properties loadProperties(String filename) throws IOException{
+    static Properties loadProperties(String filename) throws IOException{
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties props = new Properties();
         try(InputStream resourceStream = loader.getResourceAsStream(filename)) {

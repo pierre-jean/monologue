@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -77,6 +78,16 @@ public class ConsoleInterface implements UserInterface{
     // property key to the pattern printed before an instruction invite
     private static final String PROPERTY_DISPLAY_INSTRUCTION = "ui.console.display.instruction";
 
+    private static final long ONE_SECOND_IN_MS = 1000L;
+    private static final long ONE_MIN_IN_MS = 60000L;
+    private static final long ONE_HOUR_IN_MS = 3600000L;
+    private static final long ONE_DAY_IN_MS = 86400000L;
+    private static final long ONE_MONTH_IN_MS = 2592000000L;
+    private static final long ONE_YEAR_IN_MS = 31104000000L;
+
+    private static final int ONE_WORD_INSTRUCTION = 1;
+    private static final int TWO_WORD_INSTRUCTION = 2;
+
     /**
      * The properties that contains messages and display custom patters
      */
@@ -133,7 +144,7 @@ public class ConsoleInterface implements UserInterface{
             userDisplayStream.write(String.format(text).getBytes());
             userDisplayStream.flush();
         } catch (IOException e) {
-            logger.severe(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -229,13 +240,6 @@ public class ConsoleInterface implements UserInterface{
      */
     String printDelay(Date firstDate, Date now){
 
-        final long ONE_SECOND_IN_MS = 1000L;
-        final long ONE_MIN_IN_MS = 60000L;
-        final long ONE_HOUR_IN_MS = 3600000L;
-        final long ONE_DAY_IN_MS = 86400000L;
-        final long ONE_MONTH_IN_MS = 2592000000L;
-        final long ONE_YEAR_IN_MS = 31104000000L;
-
         if (firstDate.compareTo(now) > 0){
             throw new IllegalArgumentException("the date parameter should be "
                 + "previous to the second one");
@@ -281,8 +285,6 @@ public class ConsoleInterface implements UserInterface{
      * the pattern could not be mapped to any known Instruction
      */
     private Instruction parseInstruction(String userEntry){
-        final int ONE_WORD_INSTRUCTION = 1;
-        final int TWO_WORD_INSTRUCTION = 2;
         final String quitInstruction = getText(PROPERTY_INSTRUCTION_QUIT);
         final String followInstruction = getText(PROPERTY_INSTRUCTION_FOLLOW);
         final String postInstruction = getText(PROPERTY_INSTRUCTION_POST);

@@ -8,7 +8,7 @@ import fr.baraud.codurance.monologue.ui.UserInterface;
 import java.util.Date;
 
 /**
- * Created by animus on 19/08/16.
+ * FollowInstruction build a new SocialStack with an updated version of the follower user regarding his following members
  */
 public class FollowInstruction implements Instruction {
 

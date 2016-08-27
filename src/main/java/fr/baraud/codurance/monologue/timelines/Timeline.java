@@ -60,10 +60,10 @@ public class Timeline implements Comparable<Timeline>{
             return false;
         }
         Timeline timeline = (Timeline) o;
-        return (Objects.equals(message, timeline.getMessage())
+        return Objects.equals(message, timeline.getMessage())
             && Objects.equals(user, timeline.getUser())
             && Objects.equals(messageTimestamp, timeline.getMessageTimestamp())
-            && Objects.equals(next, timeline.getNext()));
+            && Objects.equals(next, timeline.getNext());
     }
 
     @Override
@@ -76,6 +76,7 @@ public class Timeline implements Comparable<Timeline>{
      * then the alphabetical order of the author, then the alphabetical order
      * of the message
      */
+    @Override
     public int compareTo(Timeline timeline) {
         if (!messageTimestamp.equals(timeline.getMessageTimestamp())){
             return messageTimestamp.compareTo(timeline.getMessageTimestamp());

@@ -8,7 +8,7 @@ import fr.baraud.codurance.monologue.ui.UserInterface;
 import java.util.Date;
 
 /**
- * Created by animus on 19/08/16.
+ * Help triggers the display of the commands usage to the User Interface
  */
 public class HelpInstruction implements Instruction {
     @Override
