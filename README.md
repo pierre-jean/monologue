@@ -82,7 +82,7 @@ You can display a user wall (aggregation of his timeline and the ones he/she fol
 
     <user name> wall
 
-*Example: Charlie wall will contains the last messages from himself and the people he follows
+*Example: Charlie wall will contains the last messages from himself and the people he follows*
 
     > Charlie wall
     Charlie - I'm in New York today! Anyone wants to have a coffee? (15 seconds ago)
