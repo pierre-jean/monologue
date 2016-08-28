@@ -36,11 +36,9 @@ You can publish a message to a user personal timeline, by providing your usernam
 
 *Example: Alice can publish message to her personal timeline, and Bob to his personal timeline*
 
-
     > Alice -> I love the weather today
     > Bob -> Damn! We lost!
     > Bob -> Good game though.
-
 
 ## Reading
 
@@ -50,13 +48,11 @@ You can read the personal timeline of any user:
 
 *Example: You can view Alice timeline and then Bob timeline*
 
-
     > Alice
     I love the weather today (5 minutes ago)
     > Bob
     Good game though. (1 minute ago)
     Damn! We lost! (2 minutes ago)
-
 
 ## Following
 
@@ -67,7 +63,6 @@ You can follow another user with the following command:
 Following will aggregate the user timeline with yours in your wall (see _Wall_ section for more info),
 
 *Example:  Charlie's timeline will change depending on who he follows*
-
 
     > Charlie -> I'm in New York today! Anyone want to have a coffee?
     > Charlie follows Alice
@@ -81,13 +76,13 @@ Following will aggregate the user timeline with yours in your wall (see _Wall_ s
     Bob - Damn! We lost! (2 minutes ago)
     Alice - I love the weather today (5 minutes ago)
 
-
 ## Wall
 
 You can display a user wall (aggregation of his timeline and the ones he/she follows):
 
     <user name> wall
 
+*Example: Charlie wall will contains the last messages from himself and the people he follows
 
     > Charlie wall
     Charlie - I'm in New York today! Anyone wants to have a coffee? (15 seconds ago)
